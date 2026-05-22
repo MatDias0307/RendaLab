@@ -31,10 +31,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 button{font-family:inherit;cursor:pointer;border:none;background:none}
 input,select{font-family:inherit;font-size:inherit;color:var(--text)}
 
-/* APP SHELL */
 .app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
 
-/* TOPBAR */
 .topbar{position:sticky;top:0;height:70px;background:var(--sidebar);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;flex-shrink:0;z-index:200}
 .logo{display:flex;align-items:center;gap:9px;font-weight:600;font-size:20px;color:var(--accent);letter-spacing:-.01em}
 .logo-icon{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center}
@@ -53,16 +51,13 @@ input,select{font-family:inherit;font-size:inherit;color:var(--text)}
 .theme-btn:hover{border-color:var(--border2)}
 .theme-btn svg{width:15px;height:15px;stroke:var(--text2);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-/* BODY */
 .body-area{display:flex;flex:1;overflow:hidden}
 
-/* SIDEBAR */
 .sidebar{width:290px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0}
 .sidebar::-webkit-scrollbar{width:4px}
 .sidebar::-webkit-scrollbar-track{background:transparent}
 .sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 
-/* Sim nav */
 .sim-nav{padding:12px 14px 0;display:flex;flex-direction:column;gap:4px}
 .sim-nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-sm);cursor:pointer;border:1px solid transparent;transition:all .18s;position:relative}
 .sim-nav-item:hover{background:var(--surface2)}
@@ -80,7 +75,6 @@ input,select{font-family:inherit;font-size:inherit;color:var(--text)}
 .sim-nav-add:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
 .sim-nav-add svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-/* Form */
 .form-area{padding:0 16px 16px;flex:0}
 .form-section-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin:14px 0 8px}
 .form-group{margin-bottom:9px}
@@ -101,6 +95,9 @@ input,select{font-family:inherit;font-size:inherit;color:var(--text)}
 .type-btn:hover{border-color:var(--border2)}
 .type-btn.active{background:var(--accent-light);border-color:rgba(34,81,163,.3);color:var(--accent);font-weight:600}
 
+/* Poupança special button */
+.type-btn[data-type="Poupança"].active{background:rgba(29,158,117,.12);border-color:rgba(29,158,117,.35);color:var(--green2)}
+
 .rent-group{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:var(--r-sm);overflow:hidden}
 .rent-btn{padding:8px;font-size:12px;font-weight:500;color:var(--text2);background:var(--surface2);border:none;cursor:pointer;transition:all .15s;text-align:center;border-right:1px solid var(--border)}
 .rent-btn:last-child{border-right:none}
@@ -115,26 +112,27 @@ input,select{font-family:inherit;font-size:inherit;color:var(--text)}
 .taxa-efetiva{background:var(--surface3);border-radius:var(--r-sm);padding:7px 11px;font-size:12px;color:var(--text2);margin-top:6px}
 .taxa-efetiva strong{color:var(--accent2);font-family:'DM Sans',sans-serif;font-weight:600}
 
+/* Poupança info box */
+.poupanca-info{background:rgba(29,158,117,.07);border:1px solid rgba(29,158,117,.2);border-radius:var(--r-sm);padding:8px 11px;font-size:12px;color:var(--green2);margin-top:6px;line-height:1.5;display:none}
+.poupanca-info strong{font-weight:600}
+
 .periodo-grid{display:grid;grid-template-columns:64px 1fr;gap:7px;align-items:end}
 .unit-group{display:flex;border:1px solid var(--border);border-radius:var(--r-sm);overflow:hidden}
 .unit-btn{flex:1;padding:8px 4px;font-size:11px;font-weight:500;color:var(--text2);background:var(--surface2);border:none;cursor:pointer;transition:all .15s;border-right:1px solid var(--border);text-align:center}
 .unit-btn:last-child{border-right:none}
 .unit-btn.active{background:var(--accent);color:#fff}
 
-/* Mini result */
 .mini-result{border-top:1px solid var(--border);padding:12px 16px;flex-shrink:0}
 .mini-result-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0}
 .mini-result-label{font-size:12px;color:var(--text3)}
 .mini-result-val{font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif}
 .mini-result-val.pos{color:var(--green2)}
 
-/* Dup btn */
 .sim-dup-bar{padding:8px 16px 12px;display:flex;gap:6px}
 .icon-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:var(--r-xs);border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:12px;cursor:pointer;transition:all .15s}
 .icon-btn:hover{border-color:var(--border2);background:var(--surface3);color:var(--text)}
 .icon-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-/* MAIN PANEL */
 .main-panel{flex:1;overflow-y:auto;display:flex;flex-direction:column}
 .main-panel::-webkit-scrollbar{width:5px}
 .main-panel::-webkit-scrollbar-track{background:transparent}
@@ -143,7 +141,6 @@ input,select{font-family:inherit;font-size:inherit;color:var(--text)}
 .tab-panel{display:none;flex:1}
 .tab-panel.active{display:flex;flex-direction:column}
 
-/* RESULTS */
 .result-area{padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:1.1rem}
 
 .hero-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem 1.5rem;box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
@@ -184,12 +181,8 @@ input,select{font-family:inherit;font-size:inherit;color:var(--text)}
 .donut-val{font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;color:var(--text)}
 .donut-pct{font-size:11px;color:var(--text3)}
 
-/* COMPARE */
 .compare-area{padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:1.1rem;padding-bottom:2rem}
 
-/* =========================================
-   COMPARE TABLE — styled like the reference
-========================================= */
 .compare-table-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-sm);overflow:hidden}
 .compare-table-header{padding:1rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
 .compare-table-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);display:flex;align-items:center;gap:7px}
@@ -207,44 +200,36 @@ input,select{font-family:inherit;font-size:inherit;color:var(--text)}
 .compare-table td{padding:13px 14px;font-size:13px;vertical-align:middle}
 .compare-table td:not(:first-child){text-align:right;font-family:'DM Sans',sans-serif;font-size:13px}
 
-/* Sim name cell */
 .ctd-sim{display:flex;align-items:center;gap:9px}
 .ctd-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 .ctd-name{font-weight:600;color:var(--text);font-size:13px}
 .ctd-badges{display:flex;gap:5px;margin-left:4px;flex-wrap:wrap}
 
-/* Type pill */
 .type-pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.02em;background:var(--accent-light);color:var(--accent)}
 .type-pill.lci{background:var(--green-bg);color:var(--green)}
 .type-pill.pre{background:var(--amber-bg);color:var(--amber)}
 .type-pill.tsd{background:rgba(100,90,200,.15);color:#8b7ff5}
+.type-pill.poup{background:rgba(16,140,100,.15);color:#10a070}
 
-/* Best badge */
 .best-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;background:var(--green-bg);color:var(--green);white-space:nowrap}
 .best-badge svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-
-/* Base badge */
 .base-badge{display:inline-flex;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;background:var(--surface3);color:var(--text3)}
 
-/* Numeric cell color classes */
 .c-green{color:var(--green2);font-weight:600}
 .c-red{color:var(--red)}
 .c-amber{color:var(--amber)}
 .c-dim{color:var(--text3)}
 .c-bold{font-weight:700;color:var(--text)}
 
-/* Diff pill */
 .diff-positive{display:inline-flex;padding:3px 8px;border-radius:5px;font-size:12px;font-weight:700;background:var(--green-bg);color:var(--green2)}
 .diff-zero{display:inline-flex;padding:3px 8px;border-radius:5px;font-size:12px;font-weight:700;background:var(--surface3);color:var(--text3)}
 .diff-negative{display:inline-flex;padding:3px 8px;border-radius:5px;font-size:12px;font-weight:700;background:var(--red-bg);color:var(--red)}
 
-/* EMPTY */
 .empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--text3);padding:4rem}
 .empty-state svg{width:42px;height:42px;stroke:var(--border2);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .empty-state p{font-size:15px;font-weight:500;color:var(--text2)}
 .empty-state small{font-size:13px;color:var(--text3)}
 
-/* LEARN */
 .learn-area{padding:1.25rem 1.5rem}
 .learn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem}
 .learn-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;box-shadow:var(--shadow-sm)}
@@ -262,28 +247,22 @@ input,select{font-family:inherit;font-size:inherit;color:var(--text)}
 .p17{background:#c0dd97;color:#274010}[data-theme="dark"] .p17{background:#0a1e04;color:#a0d060}
 .p15{background:#b5d4f4;color:#0c3a6b}[data-theme="dark"] .p15{background:#041828;color:#85b7eb}
 
-/* ===================================================
-   NOTICE BANNER
-=================================================== */
+/* Save indicator */
+.save-indicator{
+  font-size:11px;color:var(--text3);
+  padding:3px 8px;border-radius:10px;
+  background:var(--surface2);border:1px solid var(--border);
+  opacity:0;transition:opacity .3s;
+  white-space:nowrap;
+}
+.save-indicator.visible{opacity:1}
+
 .notice-banner{
   margin:1.25rem 1.5rem 0;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-left:3px solid var(--amber);
-  border-radius:var(--r);
-  padding:0;
-  overflow:hidden;
-  box-shadow:var(--shadow-sm);
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);
+  border-radius:var(--r);padding:0;overflow:hidden;box-shadow:var(--shadow-sm);
 }
-.notice-summary{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:11px 16px;
-  cursor:pointer;
-  user-select:none;
-  list-style:none;
-}
+.notice-summary{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;user-select:none;list-style:none}
 .notice-summary::-webkit-details-marker{display:none}
 .notice-summary svg{width:14px;height:14px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 .notice-icon{stroke:var(--amber)}
@@ -291,51 +270,13 @@ input,select{font-family:inherit;font-size:inherit;color:var(--text)}
 details[open] .notice-chevron{transform:rotate(180deg)}
 .notice-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--amber);background:var(--amber-bg);padding:2px 7px;border-radius:4px}
 .notice-headline{font-size:12px;font-weight:500;color:var(--text2);flex:1}
-.notice-body{
-  padding:0 16px 14px 40px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  border-top:1px solid var(--border);
-  padding-top:12px;
-}
-.notice-body p{
-  font-size:12px;
-  color:var(--text3);
-  line-height:1.65;
-}
+.notice-body{padding:0 16px 14px 40px;display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--border);padding-top:12px}
+.notice-body p{font-size:12px;color:var(--text3);line-height:1.65}
 .notice-body p strong{color:var(--text2);font-weight:600}
 
-/* ===================================================
-   FOOTER — simplified
-=================================================== */
-.app-footer{
-  flex-shrink:0;
-  background:var(--sidebar);
-  border-top:1px solid var(--border);
-  padding:30px 1.5rem;
-  height:48px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:1rem;
-}
-.footer-disclaimer{
-  font-size:11px;
-  color:var(--text3);
-  line-height:1.4;
-}
-.footer-author-link{
-  display:inline-flex;align-items:center;gap:6px;
-  text-decoration:none;
-  padding:5px 11px;
-  border-radius:20px;
-  border:1px solid var(--border);
-  background:var(--surface2);
-  transition:all .18s;
-  flex-shrink:0;
-  white-space:nowrap;
-}
+.app-footer{flex-shrink:0;background:var(--sidebar);border-top:1px solid var(--border);padding:30px 1.5rem;height:48px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.footer-disclaimer{font-size:11px;color:var(--text3);line-height:1.4}
+.footer-author-link{display:inline-flex;align-items:center;gap:6px;text-decoration:none;padding:5px 11px;border-radius:20px;border:1px solid var(--border);background:var(--surface2);transition:all .18s;flex-shrink:0;white-space:nowrap}
 .footer-author-link:hover{border-color:var(--accent);background:var(--accent-light)}
 .footer-author-link svg{width:12px;height:12px;fill:var(--text3);transition:fill .18s;flex-shrink:0}
 .footer-author-link:hover svg{fill:var(--accent)}
@@ -373,6 +314,7 @@ details[open] .notice-chevron{transform:rotate(180deg)}
     </nav>
   </div>
   <div class="topbar-right">
+    <span class="save-indicator" id="saveIndicator">💾 Salvo</span>
     <div class="sim-counter" id="simCounter">1/5 simulações</div>
     <button class="theme-btn" onclick="toggleTheme()" title="Alternar tema">
       <svg id="themeIcon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -395,55 +337,94 @@ details[open] .notice-chevron{transform:rotate(180deg)}
         <button class="type-btn active" data-type="CDB" onclick="selectType(this)">CDB</button>
         <button class="type-btn" data-type="LCI" onclick="selectType(this)">LCI/LCA</button>
         <button class="type-btn" data-type="Tesouro" onclick="selectType(this)">Tesouro</button>
+        <button class="type-btn" data-type="Poupança" onclick="selectType(this)">Poupança</button>
       </div>
     </div>
 
-    <div class="form-section-title">Rentabilidade</div>
-    <div class="form-group">
-      <div class="rent-group">
-        <button class="rent-btn active" data-rent="pos" onclick="selectRent(this)">Pós-fixado</button>
-        <button class="rent-btn" data-rent="pre" onclick="selectRent(this)">Pré-fixado</button>
-      </div>
+    <!-- Poupança info box -->
+    <div class="poupanca-info" id="poupancaInfo">
+      <strong>Regra (SELIC &gt; 8,5%):</strong> 0,5% ao mês + TR &middot; <strong>Regra (SELIC &le; 8,5%):</strong> 70% da SELIC/12 + TR. Isento de IR e IOF para pessoa física.
     </div>
 
-    <div class="form-group" id="selic-group">
-      <label class="form-label">Taxa SELIC (% a.a.) <span class="tip">?<span class="tipbox">Taxa básica de juros da economia. Referência para investimentos pós-fixados.</span></span></label>
-      <div class="input-prefix">
-        <span class="pfx">%</span>
-        <input class="form-input" type="number" id="selicInput" value="14.5" step="0.25" min="1" max="30" oninput="syncSelicInput()">
+    <div id="rentSection">
+      <div class="form-section-title">Rentabilidade</div>
+      <div class="form-group">
+        <div class="rent-group">
+          <button class="rent-btn active" data-rent="pos" onclick="selectRent(this)">Pós-fixado</button>
+          <button class="rent-btn" data-rent="pre" onclick="selectRent(this)">Pré-fixado</button>
+        </div>
       </div>
-      <div class="slider-block">
-        <div class="slider-row">
-          <input type="range" id="selicSlider" min="1" max="30" step="0.25" value="14.5" oninput="syncSelic()">
-          <span class="slider-val" id="selicDisplay">14,50%</span>
+
+      <div class="form-group" id="selic-group">
+        <label class="form-label">Taxa SELIC (% a.a.) <span class="tip">?<span class="tipbox">Taxa básica de juros da economia. Referência para investimentos pós-fixados.</span></span></label>
+        <div class="input-prefix">
+          <span class="pfx">%</span>
+          <input class="form-input" type="number" id="selicInput" value="14.5" step="0.25" min="1" max="30" oninput="syncSelicInput()">
+        </div>
+        <div class="slider-block">
+          <div class="slider-row">
+            <input type="range" id="selicSlider" min="1" max="30" step="0.25" value="14.5" oninput="syncSelic()">
+            <span class="slider-val" id="selicDisplay">14,50%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" id="cdi-group">
+        <label class="form-label">% do CDI <span class="tip">?<span class="tipbox">Percentual do CDI que o investimento rende. 110% = 10% acima do CDI.</span></span></label>
+        <div class="input-prefix">
+          <span class="pfx">%</span>
+          <input class="form-input" type="number" id="cdiInput" value="100" step="1" min="50" max="200" oninput="syncCdiInput()">
+        </div>
+        <div class="slider-block">
+          <div class="slider-row">
+            <input type="range" id="cdiSlider" min="50" max="200" step="1" value="100" oninput="syncCdi()">
+            <span class="slider-val" id="cdiDisplay">100%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" id="pre-group" style="display:none">
+        <label class="form-label">Taxa pré-fixada (% a.a.) <span class="tip">?<span class="tipbox">Taxa anual fixa acordada no momento da aplicação.</span></span></label>
+        <div class="input-prefix">
+          <span class="pfx">%</span>
+          <input class="form-input" type="number" id="preInput" value="12" step="0.25" min="0" max="30" oninput="syncPreInput()">
+        </div>
+        <div class="slider-block">
+          <div class="slider-row">
+            <input type="range" id="preSlider" min="0" max="25" step="0.25" value="12" oninput="syncPre()">
+            <span class="slider-val" id="preDisplay">12,00%</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="form-group" id="cdi-group">
-      <label class="form-label">% do CDI <span class="tip">?<span class="tipbox">Percentual do CDI que o investimento rende. 110% = 10% acima do CDI.</span></span></label>
-      <div class="input-prefix">
-        <span class="pfx">%</span>
-        <input class="form-input" type="number" id="cdiInput" value="100" step="1" min="50" max="200" oninput="syncCdiInput()">
-      </div>
-      <div class="slider-block">
-        <div class="slider-row">
-          <input type="range" id="cdiSlider" min="50" max="200" step="1" value="100" oninput="syncCdi()">
-          <span class="slider-val" id="cdiDisplay">100%</span>
+    <!-- Poupança: only SELIC input -->
+    <div id="poupancaSelicSection" style="display:none">
+      <div class="form-section-title">Taxa SELIC (base do cálculo)</div>
+      <div class="form-group">
+        <label class="form-label">Taxa SELIC (% a.a.) <span class="tip">?<span class="tipbox">SELIC &gt; 8,5%: 0,5%/mês + TR. SELIC ≤ 8,5%: 70% da SELIC/12 + TR.</span></span></label>
+        <div class="input-prefix">
+          <span class="pfx">%</span>
+          <input class="form-input" type="number" id="selicInputPoup" value="14.5" step="0.25" min="1" max="30" oninput="syncSelicPoupInput()">
+        </div>
+        <div class="slider-block">
+          <div class="slider-row">
+            <input type="range" id="selicSliderPoup" min="1" max="30" step="0.25" value="14.5" oninput="syncSelicPoup()">
+            <span class="slider-val" id="selicDisplayPoup">14,50%</span>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="form-group" id="pre-group" style="display:none">
-      <label class="form-label">Taxa pré-fixada (% a.a.) <span class="tip">?<span class="tipbox">Taxa anual fixa acordada no momento da aplicação.</span></span></label>
-      <div class="input-prefix">
-        <span class="pfx">%</span>
-        <input class="form-input" type="number" id="preInput" value="12" step="0.25" min="0" max="30" oninput="syncPreInput()">
-      </div>
-      <div class="slider-block">
-        <div class="slider-row">
-          <input type="range" id="preSlider" min="0" max="25" step="0.25" value="12" oninput="syncPre()">
-          <span class="slider-val" id="preDisplay">12,00%</span>
+      <div class="form-group">
+        <label class="form-label">TR — Taxa Referencial (% a.a.) <span class="tip">?<span class="tipbox">Taxa Referencial adicionada mensalmente ao rendimento da poupança. Historicamente próxima de 1,5% a.a. nos últimos anos, mas pode variar.</span></span></label>
+        <div class="input-prefix">
+          <span class="pfx">%</span>
+          <input class="form-input" type="number" id="trInput" value="1.5" step="0.1" min="0" max="10" oninput="syncTrInput()">
+        </div>
+        <div class="slider-block">
+          <div class="slider-row">
+            <input type="range" id="trSlider" min="0" max="5" step="0.1" value="1.5" oninput="syncTr()">
+            <span class="slider-val" id="trDisplay">1,50%</span>
+          </div>
         </div>
       </div>
     </div>
@@ -494,8 +475,6 @@ details[open] .notice-chevron{transform:rotate(180deg)}
 
 <main class="main-panel">
   <div class="tab-panel active" id="tab-simulator">
-
-    <!-- Observações / Aviso -->
     <details class="notice-banner">
       <summary class="notice-summary">
         <svg class="notice-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -546,15 +525,40 @@ details[open] .notice-chevron{transform:rotate(180deg)}
           <h3><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>LCI e LCA</h3>
           <p>Isentos de IR para pessoa física. Um LCI a 90% CDI pode superar um CDB a 110% CDI.</p>
           <p><strong>Sempre compare pelo valor líquido!</strong></p>
-        </div>
+        </div>        
         <div class="learn-card">
           <h3><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>IOF</h3>
           <p>Cobrado só em resgates em menos de 30 dias. Começa em 96% no 1º dia e vai a zero no 30º.</p>
           <p>Nunca resgate antes de 30 dias para não perder grande parte dos rendimentos.</p>
         </div>
         <div class="learn-card" style="grid-column:1/-1">
+          <h3><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Poupança — Como funciona</h3>
+          <p>A poupança é o investimento mais popular do Brasil: <strong>isenta de IR e IOF</strong> para pessoa física, com liquidez imediata. Seu rendimento segue duas regras definidas pelo Banco Central, dependendo do nível da taxa SELIC:</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px">
+            <div style="background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--green2);border-radius:var(--r-sm);padding:12px 14px">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--green2);margin-bottom:6px">SELIC &gt; 8,5% a.a. — Regra atual</div>
+              <p style="font-size:13px;color:var(--text2)">Rende <strong>0,5% ao mês + TR</strong> (Taxa Referencial).</p>
+              <p style="font-size:13px;color:var(--text2);margin-top:4px">Fórmula mensal: <code style="background:var(--surface3);padding:1px 6px;border-radius:4px;font-size:12px">(1 + 0,005 + TR_mensal)^n</code></p>
+              <p style="font-size:12px;color:var(--text3);margin-top:6px">Exemplo: SELIC = 14,5%, TR = 1,5% a.a. → rendimento ≈ <strong>7,7% a.a.</strong></p>
+            </div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:var(--r-sm);padding:12px 14px">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--amber);margin-bottom:6px">SELIC ≤ 8,5% a.a.</div>
+              <p style="font-size:13px;color:var(--text2)">Rende <strong>70% da SELIC por mês + TR</strong>.</p>
+              <p style="font-size:13px;color:var(--text2);margin-top:4px">Fórmula mensal: <code style="background:var(--surface3);padding:1px 6px;border-radius:4px;font-size:12px">(1 + 0,7 × SELIC/12 + TR_mensal)^n</code></p>
+              <p style="font-size:12px;color:var(--text3);margin-top:6px">Exemplo: SELIC = 8,0%, TR = 0% → rendimento ≈ <strong>5,6% a.a.</strong></p>
+            </div>
+          </div>
+          <div style="margin-top:12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 14px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px">O que é a TR (Taxa Referencial)?</div>
+            <p style="font-size:13px;color:var(--text2)">A TR é uma taxa calculada mensalmente pelo Banco Central com base nos juros dos títulos públicos. Ficou zerada por muitos anos (2018–2022) e voltou a subir recentemente. Ela <strong>complementa</strong> o rendimento da poupança mas seu valor é imprevisível — use estimativas conservadoras no simulador.</p>
+          </div>
+          <div style="margin-top:12px;padding:10px 14px;border-radius:var(--r-sm);background:var(--red-bg);border:1px solid rgba(168,45,45,.2)">
+            <p style="font-size:13px;color:var(--text2)">⚠️ <strong>Atenção:</strong> apesar da isenção de IR, a poupança frequentemente perde para o CDB, LCI e Tesouro Selic quando comparados pelo valor líquido. Use a aba <strong>Comparar</strong> para ver a diferença real.</p>
+          </div>
+        </div>
+        <div class="learn-card" style="grid-column:1/-1">
           <h3><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Tabela regressiva do IR</h3>
-          <p style="margin-bottom:6px">Investir por mais tempo reduz a carga tributária sobre o lucro.</p>
+          <p style="margin-bottom:6px">Investir por mais tempo reduz a carga tributária sobre o lucro. <strong>Poupança, LCI e LCA são isentos de IR.</strong></p>
           <table class="ir-table">
             <thead><tr><th>Prazo</th><th>Alíquota</th><th>Observação</th></tr></thead>
             <tbody>
@@ -597,9 +601,13 @@ details[open] .notice-chevron{transform:rotate(180deg)}
 </main>
 </div>
 
-<!-- ===================== FOOTER ===================== -->
 <footer class="app-footer">
-  <span class="footer-disclaimer">Projeto educacional · Não constitui recomendação de investimento · Os cálculos podem conter imprecisões</span>
+  <span class="footer-disclaimer">
+    Projeto educacional · Não constitui recomendação de investimento · Os cálculos podem conter imprecisões
+    <span style="margin-left:10px;padding-left:10px;border-left:1px solid var(--border2);color:var(--text3)">
+      © 2026 Matheus Dias Soares
+    </span>
+  </span>
   <a class="footer-author-link" href="https://www.linkedin.com/in/matdias0307" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
@@ -608,41 +616,84 @@ details[open] .notice-chevron{transform:rotate(180deg)}
     <span class="footer-author-name">Matheus Soares</span>
   </a>
 </footer>
-<!-- ================================================== -->
-
 </div>
 
 <script>
 /* ============================================================
-   STATE
+   CONSTANTS & STATE
 ============================================================ */
 const SIM_COLORS = ['#1d9e75','#2251a3','#e07b12','#a32d2d','#7a35b5'];
+const LS_KEY_THEME = 'rendalab_theme';
+const LS_KEY_SIMS  = 'rendalab_sims';
+const LS_KEY_ACTIVE = 'rendalab_active';
+
 let simulations = [];
 let activeSimId = null;
 let simChartInst = null;
 let donutInst = null;
 let compareChartInst = null;
 let calcTimer = null;
+let saveTimer = null;
 
 const activeSim = () => simulations.find(s => s.id === activeSimId) || null;
 
 /* ============================================================
-   INIT
+   LOCAL STORAGE — PERSISTENCE
 ============================================================ */
-function init() {
-  addSimulation();
+function persistState() {
+  try {
+    localStorage.setItem(LS_KEY_SIMS, JSON.stringify(
+      simulations.map(s => ({ ...s, result: null })) // don't persist result, recalc on load
+    ));
+    localStorage.setItem(LS_KEY_ACTIVE, String(activeSimId));
+  } catch(e) { /* quota or private browsing */ }
+}
+
+function loadPersistedState() {
+  try {
+    const raw = localStorage.getItem(LS_KEY_SIMS);
+    const active = localStorage.getItem(LS_KEY_ACTIVE);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        simulations = parsed;
+        activeSimId = parseInt(active) || parsed[0].id;
+        return true;
+      }
+    }
+  } catch(e) {}
+  return false;
+}
+
+function scheduleAutoSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    saveFormToState();
+    persistState();
+    showSaveIndicator();
+  }, 600);
+}
+
+function showSaveIndicator() {
+  const el = document.getElementById('saveIndicator');
+  el.classList.add('visible');
+  setTimeout(() => el.classList.remove('visible'), 1800);
 }
 
 /* ============================================================
-   THEME
+   THEME — with localStorage
 ============================================================ */
-function toggleTheme() {
-  const html = document.documentElement;
-  const dark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', dark ? 'light' : 'dark');
+function applyTheme(dark) {
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
   document.getElementById('themeIcon').innerHTML = dark
-    ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
-    : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    : '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
+
+function toggleTheme() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  applyTheme(!dark);
+  try { localStorage.setItem(LS_KEY_THEME, !dark ? 'dark' : 'light'); } catch(e) {}
   const sim = activeSim();
   if (sim && sim.result) renderResults(sim.result, sim);
 }
@@ -673,7 +724,7 @@ function addSimulation() {
       tipo: 'CDB', rent: 'pos',
       aporteInicial: 10000, aporteRecorrente: 500,
       periodoVal: 24, periodoUnit: 'meses',
-      selic: 14.5, cdiPct: 100, preTaxa: 12
+      selic: 14.5, cdiPct: 100, preTaxa: 12, tr: 1.5
     },
     result: null
   });
@@ -690,6 +741,7 @@ function setActiveSim(id) {
   loadFormFromSim(sim);
   updateSimNav();
   if (sim.result) renderResults(sim.result, sim);
+  else scheduleCalc();
 }
 
 function removeSimulation(id) {
@@ -698,6 +750,7 @@ function removeSimulation(id) {
   if (activeSimId === id) setActiveSim(simulations[0].id);
   updateSimNav();
   updateSimCounter();
+  scheduleAutoSave();
 }
 
 function duplicateCurrentSim() {
@@ -727,6 +780,13 @@ function loadFormFromSim(sim) {
   setEl('selicInput', p.selic);
   setEl('selicSlider', p.selic);
   setEl('selicDisplay', fmtPct(p.selic));
+  setEl('selicInputPoup', p.selic);
+  setEl('selicSliderPoup', p.selic);
+  setEl('selicDisplayPoup', fmtPct(p.selic));
+  const trVal = p.tr ?? 1.5;
+  setEl('trInput', trVal);
+  setEl('trSlider', trVal);
+  setEl('trDisplay', fmtPct(trVal));
   setEl('cdiInput', p.cdiPct);
   setEl('cdiSlider', p.cdiPct);
   setEl('cdiDisplay', p.cdiPct + '%');
@@ -743,6 +803,7 @@ function loadFormFromSim(sim) {
     b.classList.toggle('active', b.dataset.unit === p.periodoUnit));
   setEl('periodoDisplay', p.periodoVal + ' ' + unitAbbr(p.periodoUnit));
   toggleRentFields(p.rent);
+  togglePoupancaUI(p.tipo === 'Poupança');
   updateTaxaEfetiva();
 }
 
@@ -758,8 +819,15 @@ function saveFormToState() {
   p.tipo = document.querySelector('#typeGroup .type-btn.active')?.dataset.type || 'CDB';
   p.rent = document.querySelector('.rent-btn.active')?.dataset.rent || 'pos';
   p.selic = parseFloat(document.getElementById('selicInput').value) || 14.5;
+  // if poupança, sync selic from poupanca input
+  if (p.tipo === 'Poupança') {
+    p.selic = parseFloat(document.getElementById('selicInputPoup').value) || 14.5;
+  }
   p.cdiPct = parseInt(document.getElementById('cdiInput').value) || 100;
   p.preTaxa = parseFloat(document.getElementById('preInput').value) || 12;
+  if (p.tipo === 'Poupança') {
+    p.tr = parseFloat(document.getElementById('trInput').value) ?? 1.5;
+  }
   p.aporteInicial = parseMoney(document.getElementById('aporteInicial').value);
   p.aporteRecorrente = parseMoney(document.getElementById('aporteRecorrente').value);
   p.periodoVal = parseInt(document.getElementById('periodoVal').value) || 24;
@@ -791,11 +859,23 @@ function updateSimCounter() {
 }
 
 /* ============================================================
+   POUPANÇA UI TOGGLE
+============================================================ */
+function togglePoupancaUI(isPoup) {
+  document.getElementById('rentSection').style.display = isPoup ? 'none' : '';
+  document.getElementById('poupancaSelicSection').style.display = isPoup ? '' : 'none';
+  document.getElementById('poupancaInfo').style.display = isPoup ? '' : 'none';
+}
+
+/* ============================================================
    FORM CONTROLS
 ============================================================ */
 function selectType(btn) {
   document.querySelectorAll('#typeGroup .type-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  const isPoup = btn.dataset.type === 'Poupança';
+  togglePoupancaUI(isPoup);
+  updateTaxaEfetiva();
   scheduleCalc();
 }
 
@@ -868,6 +948,34 @@ function syncSelicInput() {
   updateTaxaEfetiva(); scheduleCalc();
 }
 
+/* Poupança SELIC controls */
+function syncSelicPoup() {
+  const v = parseFloat(document.getElementById('selicSliderPoup').value);
+  document.getElementById('selicInputPoup').value = v;
+  document.getElementById('selicDisplayPoup').textContent = fmtPct(v);
+  updateTaxaEfetiva(); scheduleCalc();
+}
+function syncSelicPoupInput() {
+  const v = parseFloat(document.getElementById('selicInputPoup').value) || 14.5;
+  document.getElementById('selicSliderPoup').value = v;
+  document.getElementById('selicDisplayPoup').textContent = fmtPct(v);
+  updateTaxaEfetiva(); scheduleCalc();
+}
+function syncTr() {
+  const v = parseFloat(document.getElementById('trSlider').value);
+  document.getElementById('trInput').value = v;
+  document.getElementById('trDisplay').textContent = fmtPct(v);
+  updateTaxaEfetiva(); scheduleCalc();
+}
+function syncTrInput() {
+  let v = parseFloat(document.getElementById('trInput').value);
+  if (isNaN(v)) v = 1.5;
+  v = Math.min(10, Math.max(0, v));
+  document.getElementById('trSlider').value = v;
+  document.getElementById('trDisplay').textContent = fmtPct(v);
+  updateTaxaEfetiva(); scheduleCalc();
+}
+
 function syncCdi() {
   const v = parseInt(document.getElementById('cdiSlider').value);
   document.getElementById('cdiInput').value = v;
@@ -898,8 +1006,17 @@ function syncPreInput() {
 function onMoneyInput(el) { maskMoney(el); scheduleCalc(); }
 
 function updateTaxaEfetiva() {
-  const rent = document.querySelector('.rent-btn.active')?.dataset.rent || 'pos';
+  const tipo = document.querySelector('#typeGroup .type-btn.active')?.dataset.type || 'CDB';
   let taxa;
+  if (tipo === 'Poupança') {
+    const selic = parseFloat(document.getElementById('selicInputPoup').value) || 14.5;
+    const tr = parseFloat(document.getElementById('trInput').value) ?? 1.5;
+    taxa = calcPoupancaAnual(selic, tr);
+    const regra = selic > 8.5 ? '0,5%/mês + TR' : '70% SELIC/12 + TR';
+    document.getElementById('taxaEfetivaVal').textContent = fmtPct(taxa) + ' a.a. (' + regra + ')';
+    return;
+  }
+  const rent = document.querySelector('.rent-btn.active')?.dataset.rent || 'pos';
   if (rent === 'pos') {
     const selic = parseFloat(document.getElementById('selicInput').value) || 14.5;
     const cdiPct = parseInt(document.getElementById('cdiInput').value) || 100;
@@ -924,10 +1041,15 @@ function runCalc() {
   if (!sim) return;
   sim.result = calcSimulation(sim.params);
   const p = sim.params;
-  sim.name = `${p.tipo} · ${p.rent === 'pos' ? p.cdiPct + '% CDI' : fmtPct(p.preTaxa) + ' a.a.'}`;
+  if (p.tipo === 'Poupança') {
+    sim.name = `Poupança · SELIC ${fmtPct(p.selic)}`;
+  } else {
+    sim.name = `${p.tipo} · ${p.rent === 'pos' ? p.cdiPct + '% CDI' : fmtPct(p.preTaxa) + ' a.a.'}`;
+  }
   updateSimNav();
   renderResults(sim.result, sim);
   showMiniResult(sim.result);
+  scheduleAutoSave();
 }
 
 /* ============================================================
@@ -945,6 +1067,24 @@ function parseMoney(str) {
 }
 function fmtMoneyInput(n) {
   return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+/* ============================================================
+   POUPANÇA CALC
+============================================================ */
+function calcPoupancaAnual(selicAnual, trAnual) {
+  // TR mensal equivalente
+  const trMensal = Math.pow(1 + (trAnual / 100), 1 / 12) - 1;
+  let taxaMensal;
+  if (selicAnual > 8.5) {
+    // Regra: 0,5% ao mês + TR
+    taxaMensal = 0.005 + trMensal;
+  } else {
+    // Regra: 70% da SELIC/12 + TR
+    taxaMensal = (0.70 * selicAnual / 100) / 12 + trMensal;
+  }
+  // Retorna taxa anual equivalente em %
+  return (Math.pow(1 + taxaMensal, 12) - 1) * 100;
 }
 
 /* ============================================================
@@ -979,8 +1119,12 @@ function calcSimulation(p) {
   else if (p.periodoUnit === 'meses') totalDias = Math.round(p.periodoVal * 30.4375);
   else totalDias = Math.round(p.periodoVal * 365.25);
 
+  const isPoup = p.tipo === 'Poupança';
+
   let taxaAnual;
-  if (p.rent === 'pos') {
+  if (isPoup) {
+    taxaAnual = calcPoupancaAnual(p.selic, p.tr ?? 1.5) / 100;
+  } else if (p.rent === 'pos') {
     taxaAnual = (p.selic / 100) * (p.cdiPct / 100);
   } else {
     taxaAnual = p.preTaxa / 100;
@@ -1013,15 +1157,17 @@ function calcSimulation(p) {
   const bruto = saldo;
   const lucro = bruto - totalInvestido;
 
+  // Poupança: sem IOF, sem IR
+  const isIsento = isPoup || p.tipo === 'LCI' || p.tipo === 'LCA';
+
   let iof = 0;
-  if (totalDias < 30) {
+  if (!isPoup && totalDias < 30) {
     const iofRates = [96,93,90,86,83,80,76,73,70,66,63,60,56,53,50,46,43,40,36,33,30,26,23,20,16,13,10,6,3,0].map(v => v / 100);
     const dayIdx = Math.min(totalDias - 1, 29);
     iof = lucro * (iofRates[dayIdx] || 0);
   }
 
   const lucroAposIOF = lucro - iof;
-  const isIsento = p.tipo === 'LCI' || p.tipo === 'LCA';
   const irAliquota = isIsento ? 0 : getIRAliquota(p.periodoVal, p.periodoUnit) / 100;
   const ir = lucroAposIOF * irAliquota;
 
@@ -1036,7 +1182,7 @@ function calcSimulation(p) {
     irAliquota: irAliquota * 100,
     timeline, totalDias,
     taxaAnual: taxaAnual * 100,
-    isIsento
+    isIsento, isPoup, trAnual: p.tr ?? 1.5
   };
 }
 
@@ -1072,9 +1218,14 @@ function showMiniResult(r) {
 
 function renderResults(r, sim) {
   const area = document.getElementById('resultArea');
-  const irTag = r.isIsento
-    ? '<span class="badge badge-green" style="font-size:11px">Isento de IR</span>'
-    : `<span class="badge badge-amber" style="font-size:11px">IR ${r.irAliquota.toFixed(1)}%</span>`;
+  let irTag;
+  if (r.isPoup) {
+    irTag = '<span class="badge badge-green" style="font-size:11px">Isento de IR · Poupança</span>';
+  } else if (r.isIsento) {
+    irTag = '<span class="badge badge-green" style="font-size:11px">Isento de IR</span>';
+  } else {
+    irTag = `<span class="badge badge-amber" style="font-size:11px">IR ${r.irAliquota.toFixed(1)}%</span>`;
+  }
 
   area.innerHTML = `
     <div class="hero-card">
@@ -1083,7 +1234,7 @@ function renderResults(r, sim) {
         Valor Líquido Final &nbsp;${irTag}
       </div>
       <div class="hero-val"><span>R$</span> ${fmt(r.liquido)}</div>
-      <div class="hero-sub">Rentabilidade líquida: +${fmtPct(r.rentLiquida)}</div>
+      <div class="hero-sub">Rentabilidade líquida: +${fmtPct(r.rentLiquida)}${r.isPoup ? ' · Taxa efetiva: ' + fmtPct(r.taxaAnual) + ' a.a. (TR: ' + fmtPct(r.trAnual || 1.5) + ')' : ''}</div>
     </div>
 
     <div class="stats-grid">
@@ -1102,17 +1253,18 @@ function renderResults(r, sim) {
       </div>
       <div class="stat-card v-red">
         <div class="stat-label"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>IR Descontado</div>
-        <div class="stat-val">R$ ${fmt(r.ir)}</div>
-        <div class="stat-sub">${r.irAliquota.toFixed(1)}% sobre o lucro</div>
+        <div class="stat-val">${r.ir > 0 ? 'R$ ' + fmt(r.ir) : '—'}</div>
+        <div class="stat-sub">${r.isIsento ? 'Isento' : r.irAliquota.toFixed(1) + '% sobre o lucro'}</div>
       </div>
       <div class="stat-card">
         <div class="stat-label"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>IOF Descontado</div>
         <div class="stat-val">${r.iof > 0 ? 'R$ ' + fmt(r.iof) : '—'}</div>
-        <div class="stat-sub">${r.totalDias < 30 ? 'Resgate antes de 30 dias' : 'Não aplicável'}</div>
+        <div class="stat-sub">${r.isPoup ? 'Isento (Poupança)' : r.totalDias < 30 ? 'Resgate antes de 30 dias' : 'Não aplicável'}</div>
       </div>
       <div class="stat-card">
         <div class="stat-label"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Taxa Efetiva</div>
         <div class="stat-val">${fmtPct(r.taxaAnual)} a.a.</div>
+        ${r.isPoup ? '<div class="stat-sub">70% da SELIC</div>' : ''}
       </div>
     </div>
 
@@ -1152,7 +1304,7 @@ function renderResults(r, sim) {
           </div>
           <div class="donut-row">
             <div class="donut-row-left"><div class="donut-dot" style="background:#e87a12"></div><div class="donut-name">IR + IOF</div></div>
-            <div class="donut-right"><div class="donut-val">R$ ${fmt(r.ir + r.iof)}</div><div class="donut-pct">${r.bruto > 0 ? ((r.ir+r.iof)/r.bruto*100).toFixed(1) : 0}%</div></div>
+            <div class="donut-right"><div class="donut-val">${(r.ir + r.iof) > 0 ? 'R$ ' + fmt(r.ir + r.iof) : '—'}</div><div class="donut-pct">${r.bruto > 0 ? ((r.ir+r.iof)/r.bruto*100).toFixed(1) : 0}%</div></div>
           </div>
         </div>
       </div>
@@ -1235,13 +1387,14 @@ function renderDonutChart(r, sim) {
   if (donutInst) { donutInst.destroy(); donutInst = null; }
   const ctx = document.getElementById('donutChart');
   if (!ctx) return;
+  const taxTotal = r.ir + r.iof;
   donutInst = new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels: ['Investido','Lucro Líquido','IR + IOF'],
       datasets: [{
-        data: [+r.totalInvestido.toFixed(2), +r.lucroLiquido.toFixed(2), +(r.ir+r.iof).toFixed(2)],
-        backgroundColor: ['#4da3ff', sim.color, '#e87a12'],
+        data: [+r.totalInvestido.toFixed(2), +r.lucroLiquido.toFixed(2), +taxTotal.toFixed(2)],
+        backgroundColor: ['#4da3ff', sim.color, taxTotal > 0 ? '#e87a12' : 'transparent'],
         borderWidth: 0, hoverOffset: 6
       }]
     },
@@ -1256,11 +1409,12 @@ function renderDonutChart(r, sim) {
 }
 
 /* ============================================================
-   COMPARE — with table
+   COMPARE
 ============================================================ */
 function typePillClass(tipo) {
   if (tipo === 'LCI' || tipo === 'LCA') return 'lci';
   if (tipo === 'Tesouro') return 'tsd';
+  if (tipo === 'Poupança') return 'poup';
   return '';
 }
 
@@ -1279,11 +1433,7 @@ function renderCompare() {
 
   const best = sims.reduce((a, b) => a.result.liquido > b.result.liquido ? a : b);
   const lowestTax = sims.reduce((a, b) => (a.result.ir+a.result.iof) < (b.result.ir+b.result.iof) ? a : b);
-  const maxL = Math.max(...sims.map(s => s.result.liquido));
-  const minL = Math.min(...sims.map(s => s.result.liquido));
 
-  // Build compare table rows
-  // Sort by liquido descending so best is on top
   const sorted = [...sims].sort((a, b) => b.result.liquido - a.result.liquido);
   const baseVal = sorted[sorted.length - 1]?.result.liquido || sorted[0].result.liquido;
 
@@ -1313,15 +1463,13 @@ function renderCompare() {
           <div class="ctd-sim">
             <div class="ctd-dot" style="background:${sim.color}"></div>
             <span class="ctd-name">${sim.name}</span>
-            <div class="ctd-badges">
-              ${bestBadge}
-            </div>
+            <div class="ctd-badges">${bestBadge}</div>
           </div>
         </td>
         <td>${tipoPill}</td>
         <td class="c-bold">R$ ${fmt(r.totalInvestido)}</td>
         <td>R$ ${fmt(r.bruto)}</td>
-        <td class="${taxColor}">R$ ${fmt(taxTotal)}</td>
+        <td class="${taxColor}">${taxTotal > 0 ? 'R$ ' + fmt(taxTotal) : '—'}</td>
         <td class="c-bold c-green" style="color:var(--green2)">R$ ${fmt(r.liquido)}</td>
         <td class="${rentColor}" style="${r.rentLiquida > 0 ? 'color:var(--green2);font-weight:700' : ''}">${fmtPct(r.rentLiquida)}</td>
         <td>${diffCell}</td>
@@ -1329,7 +1477,6 @@ function renderCompare() {
   }).join('');
 
   area.innerHTML = `
-
     <div class="chart-card">
       <div class="chart-header">
         <div class="chart-title">
@@ -1342,7 +1489,6 @@ function renderCompare() {
         ${sims.map(s=>`<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2)"><div style="width:18px;height:3px;border-radius:1px;background:${s.color}"></div>${s.name}</div>`).join('')}
       </div>
     </div>
-
     <div class="compare-table-card">
       <div class="compare-table-header">
         <div class="compare-table-title">
@@ -1420,6 +1566,37 @@ function renderCompareChart(sims) {
 /* ============================================================
    BOOTSTRAP
 ============================================================ */
+function init() {
+  // Load theme first
+  try {
+    const savedTheme = localStorage.getItem(LS_KEY_THEME);
+    if (savedTheme) {
+      applyTheme(savedTheme === 'dark');
+    }
+  } catch(e) {}
+
+  // Load simulations
+  const restored = loadPersistedState();
+  if (restored && simulations.length > 0) {
+    updateSimNav();
+    updateSimCounter();
+    // Recalc all sims
+    simulations.forEach(s => { s.result = calcSimulation(s.params); });
+    // Set active and render
+    const found = simulations.find(s => s.id === activeSimId);
+    if (!found) activeSimId = simulations[0].id;
+    loadFormFromSim(activeSim());
+    updateSimNav();
+    const sim = activeSim();
+    if (sim && sim.result) {
+      renderResults(sim.result, sim);
+      showMiniResult(sim.result);
+    }
+  } else {
+    addSimulation();
+  }
+}
+
 init();
 </script>
 </div>
