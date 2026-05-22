@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RendaLab — Calculadora de Renda Fixa</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg:#f2f4f8;--sidebar:#ffffff;--surface:#ffffff;--surface2:#f5f6fa;--surface3:#eceef4;
+  --border:#dde0ea;--border2:#c4c8d8;--text:#0f1422;--text2:#48516e;--text3:#8a91aa;
+  --accent:#1a3a6b;--accent2:#2251a3;--accent-light:#e6ecf8;
+  --green:#0d6b3b;--green2:#1d9e75;--green-bg:#e5f5ec;--green-glow:rgba(29,158,117,0.15);
+  --red:#a32d2d;--red-bg:#fbeaea;--amber:#7a4a08;--amber-bg:#fdf0d9;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.05),0 2px 8px rgba(0,0,0,.04);
+  --shadow:0 2px 6px rgba(0,0,0,.06),0 6px 20px rgba(0,0,0,.05);
+  --r:12px;--r-sm:8px;--r-xs:6px;
+}
+[data-theme="dark"]{
+  --bg:#0c0f18;--sidebar:#111420;--surface:#141824;--surface2:#1a1f30;--surface3:#20263a;
+  --border:#252c40;--border2:#333c58;--text:#e6e9f4;--text2:#8f96b4;--text3:#505878;
+  --accent:#5b8de8;--accent2:#7aa3f0;--accent-light:#161e36;
+  --green:#2ecc71;--green2:#1d9e75;--green-bg:#0a2318;--green-glow:rgba(29,158,117,0.12);
+  --red:#e87070;--red-bg:#28100f;--amber:#f5b944;--amber-bg:#221500;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.25);--shadow:0 2px 10px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;height:100%}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .25s,color .25s;font-size:14px;line-height:1.6}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,select{font-family:inherit;font-size:inherit;color:var(--text)}
+
+/* APP SHELL */
+.app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;height:70px;background:var(--sidebar);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;flex-shrink:0;z-index:200}
+.logo{display:flex;align-items:center;gap:9px;font-weight:600;font-size:20px;color:var(--accent);letter-spacing:-.01em}
+.logo-icon{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.sim-counter{font-size:13px;font-weight:500;color:var(--text3);padding:4px 10px;border-radius:20px;background:var(--surface2);border:1px solid var(--border)}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:.02em}
+.badge-blue{background:var(--accent-light);color:var(--accent)}
+.badge-green{background:var(--green-bg);color:var(--green)}
+.badge-amber{background:var(--amber-bg);color:var(--amber)}
+.topbar-tabs{display:flex;align-items:center;gap:2px;margin-left:1.5rem}
+.ttab{padding:6px 14px;border-radius:var(--r-sm);font-size:14px;font-weight:500;color:var(--text2);transition:all .18s;cursor:pointer}
+.ttab:hover{color:var(--text);background:var(--surface2)}
+.ttab.active{background:var(--accent-light);color:var(--accent);font-weight:600}
+.theme-btn{width:35px;height:35px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s}
+.theme-btn:hover{border-color:var(--border2)}
+.theme-btn svg{width:15px;height:15px;stroke:var(--text2);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* BODY */
+.body-area{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:290px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* Sim nav */
+.sim-nav{padding:12px 14px 0;display:flex;flex-direction:column;gap:4px}
+.sim-nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-sm);cursor:pointer;border:1px solid transparent;transition:all .18s;position:relative}
+.sim-nav-item:hover{background:var(--surface2)}
+.sim-nav-item.active{background:var(--accent-light);border-color:rgba(34,81,163,.15)}
+.sim-nav-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.sim-nav-label{flex:1;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sim-nav-val{font-size:11px;font-weight:600;color:var(--green2);font-family:'DM Sans',sans-serif;white-space:nowrap}
+.sim-nav-remove{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .15s;flex-shrink:0;border:1px solid transparent}
+.sim-nav-item:hover .sim-nav-remove{opacity:1}
+.sim-nav-remove:hover{background:var(--red-bg);border-color:#f09595}
+.sim-nav-remove svg{width:11px;height:11px;stroke:var(--text3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sim-nav-remove:hover svg{stroke:var(--red)}
+
+.sim-nav-add{display:flex;align-items:center;justify-content:center;gap:7px;padding:8px 12px;border-radius:var(--r-sm);border:1px dashed var(--border2);color:var(--text3);font-size:13px;cursor:pointer;transition:all .18s;margin:6px 14px 10px}
+.sim-nav-add:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.sim-nav-add svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Form */
+.form-area{padding:0 16px 16px;flex:0}
+.form-section-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin:14px 0 8px}
+.form-group{margin-bottom:9px}
+.form-label{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:4px}
+.tip{width:14px;height:14px;border-radius:50%;background:var(--surface3);display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--text3);cursor:help;position:relative;flex-shrink:0}
+.tip:hover .tipbox{display:block}
+.tipbox{display:none;position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 6px);background:var(--text);color:var(--bg);font-size:11px;padding:7px 10px;border-radius:6px;white-space:normal;z-index:300;min-width:170px;max-width:220px;line-height:1.5;text-transform:none;letter-spacing:0;font-weight:400}
+.tipbox::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--text)}
+.form-input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface2);color:var(--text);font-size:13px;transition:border .15s,box-shadow .15s;outline:none}
+.form-input:hover{border-color:var(--border2)}
+.form-input:focus{border-color:var(--accent2);background:var(--surface);box-shadow:0 0 0 2.5px rgba(34,81,163,.1)}
+.input-prefix{position:relative}
+.input-prefix .pfx{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:500;color:var(--text3);pointer-events:none}
+.input-prefix .form-input{padding-left:26px}
+
+.type-group{display:flex;gap:4px;flex-wrap:wrap}
+.type-btn{padding:5px 10px;border-radius:6px;border:1px solid var(--border);font-size:12px;font-weight:500;color:var(--text2);background:var(--surface2);cursor:pointer;transition:all .15s}
+.type-btn:hover{border-color:var(--border2)}
+.type-btn.active{background:var(--accent-light);border-color:rgba(34,81,163,.3);color:var(--accent);font-weight:600}
+
+.rent-group{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:var(--r-sm);overflow:hidden}
+.rent-btn{padding:8px;font-size:12px;font-weight:500;color:var(--text2);background:var(--surface2);border:none;cursor:pointer;transition:all .15s;text-align:center;border-right:1px solid var(--border)}
+.rent-btn:last-child{border-right:none}
+.rent-btn.active{background:var(--accent);color:#fff;font-weight:600}
+
+.slider-block{margin-top:4px}
+.slider-row{display:flex;align-items:center;gap:8px}
+.slider-row input[type=range]{flex:1;-webkit-appearance:none;height:3px;border-radius:2px;background:var(--surface3);outline:none;cursor:pointer}
+.slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent2);border:2px solid var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.slider-val{font-size:12px;font-weight:600;color:var(--accent);min-width:44px;text-align:right;font-family:'DM Sans',sans-serif}
+
+.taxa-efetiva{background:var(--surface3);border-radius:var(--r-sm);padding:7px 11px;font-size:12px;color:var(--text2);margin-top:6px}
+.taxa-efetiva strong{color:var(--accent2);font-family:'DM Sans',sans-serif;font-weight:600}
+
+.periodo-grid{display:grid;grid-template-columns:64px 1fr;gap:7px;align-items:end}
+.unit-group{display:flex;border:1px solid var(--border);border-radius:var(--r-sm);overflow:hidden}
+.unit-btn{flex:1;padding:8px 4px;font-size:11px;font-weight:500;color:var(--text2);background:var(--surface2);border:none;cursor:pointer;transition:all .15s;border-right:1px solid var(--border);text-align:center}
+.unit-btn:last-child{border-right:none}
+.unit-btn.active{background:var(--accent);color:#fff}
+
+/* Mini result */
+.mini-result{border-top:1px solid var(--border);padding:12px 16px;flex-shrink:0}
+.mini-result-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0}
+.mini-result-label{font-size:12px;color:var(--text3)}
+.mini-result-val{font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif}
+.mini-result-val.pos{color:var(--green2)}
+
+/* Dup btn */
+.sim-dup-bar{padding:8px 16px 12px;display:flex;gap:6px}
+.icon-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:var(--r-xs);border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:12px;cursor:pointer;transition:all .15s}
+.icon-btn:hover{border-color:var(--border2);background:var(--surface3);color:var(--text)}
+.icon-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* MAIN PANEL */
+.main-panel{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.main-panel::-webkit-scrollbar{width:5px}
+.main-panel::-webkit-scrollbar-track{background:transparent}
+.main-panel::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+.tab-panel{display:none;flex:1}
+.tab-panel.active{display:flex;flex-direction:column}
+
+/* RESULTS */
+.result-area{padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:1.1rem}
+
+.hero-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem 1.5rem;box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
+.hero-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--green-glow),transparent 60%);pointer-events:none}
+.hero-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.hero-label svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hero-val{font-size:40px;font-weight:300;color:var(--green);letter-spacing:-.02em;line-height:1}
+.hero-val span{font-size:20px;font-weight:400;margin-right:3px}
+.hero-sub{font-size:13px;color:var(--text3);margin-top:7px}
+
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.1rem;box-shadow:var(--shadow-sm)}
+.stat-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.stat-label svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.stat-val{font-size:20px;font-weight:400;color:var(--text);letter-spacing:-.01em;line-height:1.2}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:3px}
+.stat-card.v-green .stat-val{color:var(--green)}
+.stat-card.v-red .stat-val{color:var(--red)}
+
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.4rem;box-shadow:var(--shadow-sm)}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.chart-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);display:flex;align-items:center;gap:6px}
+.chart-title svg{width:14px;height:14px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chart-legend{display:flex;gap:12px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
+.legend-dot{width:8px;height:8px;border-radius:2px}
+.legend-dash{width:16px;height:2px;border-top:2px dashed var(--text3)}
+
+.donut-wrap{display:flex;align-items:center;gap:2rem}
+.donut-canvas-wrap{position:relative;width:170px;height:170px;flex-shrink:0}
+.donut-legend{flex:1;display:flex;flex-direction:column;gap:9px}
+.donut-row{display:flex;justify-content:space-between;align-items:center;padding-bottom:9px;border-bottom:1px solid var(--border)}
+.donut-row:last-child{border-bottom:none;padding-bottom:0}
+.donut-row-left{display:flex;align-items:center;gap:8px}
+.donut-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.donut-name{font-size:13px;color:var(--text2)}
+.donut-right{text-align:right}
+.donut-val{font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;color:var(--text)}
+.donut-pct{font-size:11px;color:var(--text3)}
+
+/* COMPARE */
+.compare-area{padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:1.1rem;padding-bottom:2rem}
+
+/* =========================================
+   COMPARE TABLE — styled like the reference
+========================================= */
+.compare-table-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-sm);overflow:hidden}
+.compare-table-header{padding:1rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.compare-table-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);display:flex;align-items:center;gap:7px}
+.compare-table-title svg{width:14px;height:14px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.compare-table-wrap{overflow-x:auto}
+.compare-table{width:100%;border-collapse:collapse;min-width:720px}
+.compare-table thead tr{background:var(--surface2)}
+.compare-table th{padding:10px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);text-align:left;white-space:nowrap;border-bottom:1px solid var(--border)}
+.compare-table th:not(:first-child){text-align:right}
+.compare-table tbody tr{border-bottom:1px solid var(--border);transition:background .15s;cursor:default}
+.compare-table tbody tr:last-child{border-bottom:none}
+.compare-table tbody tr:hover{background:var(--surface2)}
+.compare-table tbody tr.row-best{background:rgba(29,158,117,.06)}
+[data-theme="light"] .compare-table tbody tr.row-best{background:rgba(29,158,117,.04)}
+.compare-table td{padding:13px 14px;font-size:13px;vertical-align:middle}
+.compare-table td:not(:first-child){text-align:right;font-family:'DM Sans',sans-serif;font-size:13px}
+
+/* Sim name cell */
+.ctd-sim{display:flex;align-items:center;gap:9px}
+.ctd-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.ctd-name{font-weight:600;color:var(--text);font-size:13px}
+.ctd-badges{display:flex;gap:5px;margin-left:4px;flex-wrap:wrap}
+
+/* Type pill */
+.type-pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.02em;background:var(--accent-light);color:var(--accent)}
+.type-pill.lci{background:var(--green-bg);color:var(--green)}
+.type-pill.pre{background:var(--amber-bg);color:var(--amber)}
+.type-pill.tsd{background:rgba(100,90,200,.15);color:#8b7ff5}
+
+/* Best badge */
+.best-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;background:var(--green-bg);color:var(--green);white-space:nowrap}
+.best-badge svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* Base badge */
+.base-badge{display:inline-flex;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;background:var(--surface3);color:var(--text3)}
+
+/* Numeric cell color classes */
+.c-green{color:var(--green2);font-weight:600}
+.c-red{color:var(--red)}
+.c-amber{color:var(--amber)}
+.c-dim{color:var(--text3)}
+.c-bold{font-weight:700;color:var(--text)}
+
+/* Diff pill */
+.diff-positive{display:inline-flex;padding:3px 8px;border-radius:5px;font-size:12px;font-weight:700;background:var(--green-bg);color:var(--green2)}
+.diff-zero{display:inline-flex;padding:3px 8px;border-radius:5px;font-size:12px;font-weight:700;background:var(--surface3);color:var(--text3)}
+.diff-negative{display:inline-flex;padding:3px 8px;border-radius:5px;font-size:12px;font-weight:700;background:var(--red-bg);color:var(--red)}
+
+/* EMPTY */
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--text3);padding:4rem}
+.empty-state svg{width:42px;height:42px;stroke:var(--border2);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.empty-state p{font-size:15px;font-weight:500;color:var(--text2)}
+.empty-state small{font-size:13px;color:var(--text3)}
+
+/* LEARN */
+.learn-area{padding:1.25rem 1.5rem}
+.learn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem}
+.learn-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;box-shadow:var(--shadow-sm)}
+.learn-card h3{font-size:13px;font-weight:600;margin-bottom:.6rem;display:flex;align-items:center;gap:7px}
+.learn-card h3 svg{width:15px;height:15px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.learn-card p{font-size:13px;color:var(--text2);line-height:1.7}
+.learn-card p+p{margin-top:5px}
+.ir-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:9px}
+.ir-table th{text-align:left;padding:6px 10px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border)}
+.ir-table td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text2)}
+.ir-table tr:last-child td{border-bottom:none}
+.ir-pill{display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;font-family:'DM Sans',sans-serif}
+.p22{background:#f5c4b3;color:#6e2810}[data-theme="dark"] .p22{background:#2a1008;color:#f0906a}
+.p20{background:#fac775;color:#5c3508}[data-theme="dark"] .p20{background:#221200;color:#fac775}
+.p17{background:#c0dd97;color:#274010}[data-theme="dark"] .p17{background:#0a1e04;color:#a0d060}
+.p15{background:#b5d4f4;color:#0c3a6b}[data-theme="dark"] .p15{background:#041828;color:#85b7eb}
+
+/* ===================================================
+   NOTICE BANNER
+=================================================== */
+.notice-banner{
+  margin:1.25rem 1.5rem 0;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-left:3px solid var(--amber);
+  border-radius:var(--r);
+  padding:0;
+  overflow:hidden;
+  box-shadow:var(--shadow-sm);
+}
+.notice-summary{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px 16px;
+  cursor:pointer;
+  user-select:none;
+  list-style:none;
+}
+.notice-summary::-webkit-details-marker{display:none}
+.notice-summary svg{width:14px;height:14px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.notice-icon{stroke:var(--amber)}
+.notice-chevron{stroke:var(--text3);margin-left:auto;transition:transform .2s}
+details[open] .notice-chevron{transform:rotate(180deg)}
+.notice-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--amber);background:var(--amber-bg);padding:2px 7px;border-radius:4px}
+.notice-headline{font-size:12px;font-weight:500;color:var(--text2);flex:1}
+.notice-body{
+  padding:0 16px 14px 40px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  border-top:1px solid var(--border);
+  padding-top:12px;
+}
+.notice-body p{
+  font-size:12px;
+  color:var(--text3);
+  line-height:1.65;
+}
+.notice-body p strong{color:var(--text2);font-weight:600}
+
+/* ===================================================
+   FOOTER — simplified
+=================================================== */
+.app-footer{
+  flex-shrink:0;
+  background:var(--sidebar);
+  border-top:1px solid var(--border);
+  padding:30px 1.5rem;
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+}
+.footer-disclaimer{
+  font-size:11px;
+  color:var(--text3);
+  line-height:1.4;
+}
+.footer-author-link{
+  display:inline-flex;align-items:center;gap:6px;
+  text-decoration:none;
+  padding:5px 11px;
+  border-radius:20px;
+  border:1px solid var(--border);
+  background:var(--surface2);
+  transition:all .18s;
+  flex-shrink:0;
+  white-space:nowrap;
+}
+.footer-author-link:hover{border-color:var(--accent);background:var(--accent-light)}
+.footer-author-link svg{width:12px;height:12px;fill:var(--text3);transition:fill .18s;flex-shrink:0}
+.footer-author-link:hover svg{fill:var(--accent)}
+.footer-author-name{font-size:12px;font-weight:600;color:var(--text2);transition:color .18s}
+.footer-author-link:hover .footer-author-name{color:var(--accent)}
+
+@media(max-width:900px){.stats-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){
+  .sidebar{width:100%;border-right:none;border-bottom:1px solid var(--border)}
+  .body-area{flex-direction:column}.app{height:auto;overflow:visible}
+  .main-panel{overflow:visible}.tab-panel{overflow:visible}
+  .stats-grid{grid-template-columns:1fr 1fr}.hero-val{font-size:32px}
+  .donut-wrap{flex-direction:column}
+  .topbar-tabs{display:none}
+  .app-footer{height:auto;padding:10px 1rem;flex-direction:column;align-items:flex-start;gap:6px}
+  .notice-banner{margin:1rem 1rem 0}
+  .notice-body{padding-left:16px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <div style="display:flex;align-items:center">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+      </div>
+      RendaLab
+    </div>
+    <nav class="topbar-tabs">
+      <button class="ttab active" onclick="showTab('simulator',this)">Simulador</button>
+      <button class="ttab" onclick="showTab('compare',this)">Comparar</button>
+      <button class="ttab" onclick="showTab('learn',this)">Informações</button>
+    </nav>
+  </div>
+  <div class="topbar-right">
+    <div class="sim-counter" id="simCounter">1/5 simulações</div>
+    <button class="theme-btn" onclick="toggleTheme()" title="Alternar tema">
+      <svg id="themeIcon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="body-area">
+<aside class="sidebar" id="sidebar">
+  <div class="sim-nav" id="simNav"></div>
+  <button class="sim-nav-add" id="addSimBtn" onclick="addSimulation()">
+    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Nova simulação
+  </button>
+
+  <div class="form-area">
+    <div class="form-section-title">Tipo de Investimento</div>
+    <div class="form-group">
+      <div class="type-group" id="typeGroup">
+        <button class="type-btn active" data-type="CDB" onclick="selectType(this)">CDB</button>
+        <button class="type-btn" data-type="LCI" onclick="selectType(this)">LCI/LCA</button>
+        <button class="type-btn" data-type="Tesouro" onclick="selectType(this)">Tesouro</button>
+      </div>
+    </div>
+
+    <div class="form-section-title">Rentabilidade</div>
+    <div class="form-group">
+      <div class="rent-group">
+        <button class="rent-btn active" data-rent="pos" onclick="selectRent(this)">Pós-fixado</button>
+        <button class="rent-btn" data-rent="pre" onclick="selectRent(this)">Pré-fixado</button>
+      </div>
+    </div>
+
+    <div class="form-group" id="selic-group">
+      <label class="form-label">Taxa SELIC (% a.a.) <span class="tip">?<span class="tipbox">Taxa básica de juros da economia. Referência para investimentos pós-fixados.</span></span></label>
+      <div class="input-prefix">
+        <span class="pfx">%</span>
+        <input class="form-input" type="number" id="selicInput" value="14.5" step="0.25" min="1" max="30" oninput="syncSelicInput()">
+      </div>
+      <div class="slider-block">
+        <div class="slider-row">
+          <input type="range" id="selicSlider" min="1" max="30" step="0.25" value="14.5" oninput="syncSelic()">
+          <span class="slider-val" id="selicDisplay">14,50%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" id="cdi-group">
+      <label class="form-label">% do CDI <span class="tip">?<span class="tipbox">Percentual do CDI que o investimento rende. 110% = 10% acima do CDI.</span></span></label>
+      <div class="input-prefix">
+        <span class="pfx">%</span>
+        <input class="form-input" type="number" id="cdiInput" value="100" step="1" min="50" max="200" oninput="syncCdiInput()">
+      </div>
+      <div class="slider-block">
+        <div class="slider-row">
+          <input type="range" id="cdiSlider" min="50" max="200" step="1" value="100" oninput="syncCdi()">
+          <span class="slider-val" id="cdiDisplay">100%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" id="pre-group" style="display:none">
+      <label class="form-label">Taxa pré-fixada (% a.a.) <span class="tip">?<span class="tipbox">Taxa anual fixa acordada no momento da aplicação.</span></span></label>
+      <div class="input-prefix">
+        <span class="pfx">%</span>
+        <input class="form-input" type="number" id="preInput" value="12" step="0.25" min="0" max="30" oninput="syncPreInput()">
+      </div>
+      <div class="slider-block">
+        <div class="slider-row">
+          <input type="range" id="preSlider" min="0" max="25" step="0.25" value="12" oninput="syncPre()">
+          <span class="slider-val" id="preDisplay">12,00%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="taxa-efetiva" id="taxaEfetiva">Taxa efetiva: <strong id="taxaEfetivaVal">—</strong></div>
+
+    <div class="form-section-title">Aportes</div>
+    <div class="form-group">
+      <label class="form-label">Aporte Inicial <span class="tip">?<span class="tipbox">Valor investido de uma só vez no início da aplicação.</span></span></label>
+      <div class="input-prefix">
+        <span class="pfx">R$</span>
+        <input class="form-input" type="text" id="aporteInicial" value="10.000,00" oninput="onMoneyInput(this)">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Aporte Mensal <span class="tip">?<span class="tipbox">Valor adicionado todo mês ao investimento.</span></span></label>
+      <div class="input-prefix">
+        <span class="pfx">R$</span>
+        <input class="form-input" type="text" id="aporteRecorrente" value="500,00" oninput="onMoneyInput(this)">
+      </div>
+    </div>
+
+    <div class="form-section-title">Período</div>
+    <div class="form-group">
+      <div class="periodo-grid">
+        <input class="form-input" type="number" id="periodoVal" value="24" min="1" max="721" oninput="updatePeriodo()">
+        <div class="unit-group">
+          <button class="unit-btn" data-unit="dias" onclick="selectUnit(this)">Dias</button>
+          <button class="unit-btn active" data-unit="meses" onclick="selectUnit(this)">Meses</button>
+          <button class="unit-btn" data-unit="anos" onclick="selectUnit(this)">Anos</button>
+        </div>
+      </div>
+      <div class="slider-block" style="margin-top:8px">
+        <div class="slider-row">
+          <input type="range" id="periodoSlider" min="1" max="25" value="24" oninput="syncPeriodo()">
+          <span class="slider-val" id="periodoDisplay">24 m</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mini-result" id="miniResult">
+    <div class="mini-result-row"><span class="mini-result-label">Valor Líquido</span><span class="mini-result-val pos" id="mrLiquido">—</span></div>
+    <div class="mini-result-row"><span class="mini-result-label">Lucro Líquido</span><span class="mini-result-val pos" id="mrLucro">—</span></div>
+    <div class="mini-result-row"><span class="mini-result-label">Rentabilidade</span><span class="mini-result-val" id="mrRent">—</span></div>
+  </div>
+</aside>
+
+<main class="main-panel">
+  <div class="tab-panel active" id="tab-simulator">
+
+    <!-- Observações / Aviso -->
+    <details class="notice-banner">
+      <summary class="notice-summary">
+        <svg class="notice-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span class="notice-tag">Aviso</span>
+        <span class="notice-headline">Este projeto é educacional — clique para ler.</span>
+        <svg class="notice-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="notice-body">
+        <p>Este projeto foi desenvolvido com auxílio do <strong>Claude AI</strong> para fins de <strong>estudo, aprendizado e experimentação</strong>.</p>
+        <p>As simulações possuem caráter exclusivamente <strong>educacional e informativo</strong>. O projeto <strong>não constitui recomendação de investimento</strong>, consultoria financeira ou qualquer tipo de orientação profissional.</p>
+        <p>Os cálculos podem apresentar divergências, imprecisões ou erros, especialmente em relação a regras tributárias, índices econômicos e rentabilidade real de produtos financeiros.</p>
+        <p>Este <strong>não é um sistema financeiro oficial</strong> nem uma aplicação destinada ao uso comercial ou tomada de decisão financeira real.</p>
+      </div>
+    </details>
+
+    <div class="result-area" id="resultArea">
+      <div class="empty-state" id="emptyState" style="display:none">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <p>Aguardando dados</p>
+        <small>Preencha os campos ao lado para simular</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-compare">
+    <div class="compare-area" id="compareArea"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-learn">
+    <div class="learn-area">
+      <div class="learn-grid">
+        <div class="learn-card">
+          <h3><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>O que é CDI?</h3>
+          <p>O <strong>CDI</strong> (Certificado de Depósito Interbancário) é a taxa de juros dos empréstimos entre bancos, quase sempre igual à SELIC.</p>
+          <p>Um CDB a "110% do CDI" paga 10% a mais que a taxa CDI do período.</p>
+        </div>
+        <div class="learn-card">
+          <h3><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>O que é SELIC?</h3>
+          <p>A <strong>SELIC</strong> é a taxa básica de juros da economia brasileira, definida pelo Banco Central a cada 45 dias.</p>
+          <p>Quando sobe, os investimentos em renda fixa rendem mais.</p>
+        </div>
+        <div class="learn-card">
+          <h3><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Pré x Pós-fixado</h3>
+          <p><strong>Pré:</strong> taxa definida na contratação, não muda. Ideal se acha que juros vão cair.</p>
+          <p><strong>Pós:</strong> varia com CDI/SELIC. Ideal se acha que juros vão permanecer altos.</p>
+        </div>
+        <div class="learn-card">
+          <h3><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>LCI e LCA</h3>
+          <p>Isentos de IR para pessoa física. Um LCI a 90% CDI pode superar um CDB a 110% CDI.</p>
+          <p><strong>Sempre compare pelo valor líquido!</strong></p>
+        </div>
+        <div class="learn-card">
+          <h3><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>IOF</h3>
+          <p>Cobrado só em resgates em menos de 30 dias. Começa em 96% no 1º dia e vai a zero no 30º.</p>
+          <p>Nunca resgate antes de 30 dias para não perder grande parte dos rendimentos.</p>
+        </div>
+        <div class="learn-card" style="grid-column:1/-1">
+          <h3><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Tabela regressiva do IR</h3>
+          <p style="margin-bottom:6px">Investir por mais tempo reduz a carga tributária sobre o lucro.</p>
+          <table class="ir-table">
+            <thead><tr><th>Prazo</th><th>Alíquota</th><th>Observação</th></tr></thead>
+            <tbody>
+              <tr><td>Até 180 dias</td><td><span class="ir-pill p22">22,5%</span></td><td>Curto prazo</td></tr>
+              <tr><td>181 a 360 dias</td><td><span class="ir-pill p20">20,0%</span></td><td>Médio prazo</td></tr>
+              <tr><td>361 a 720 dias</td><td><span class="ir-pill p17">17,5%</span></td><td>Moderado</td></tr>
+              <tr><td>Acima de 720 dias</td><td><span class="ir-pill p15">15,0%</span></td><td>Longo prazo</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="learn-card" style="grid-column:1/-1">
+          <h3><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Tabela regressiva do IOF</h3>
+          <p style="margin-bottom:6px">O IOF regressivo é cobrado apenas em resgates antes de 30 dias.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <table class="ir-table">
+              <thead><tr><th>Dias</th><th>IOF</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>96%</td></tr><tr><td>2</td><td>93%</td></tr><tr><td>3</td><td>90%</td></tr>
+                <tr><td>4</td><td>86%</td></tr><tr><td>5</td><td>83%</td></tr><tr><td>6</td><td>80%</td></tr>
+                <tr><td>7</td><td>76%</td></tr><tr><td>8</td><td>73%</td></tr><tr><td>9</td><td>70%</td></tr>
+                <tr><td>10</td><td>66%</td></tr><tr><td>11</td><td>63%</td></tr><tr><td>12</td><td>60%</td></tr>
+                <tr><td>13</td><td>56%</td></tr><tr><td>14</td><td>53%</td></tr><tr><td>15</td><td>50%</td></tr>
+              </tbody>
+            </table>
+            <table class="ir-table">
+              <thead><tr><th>Dias</th><th>IOF</th></tr></thead>
+              <tbody>
+                <tr><td>16</td><td>46%</td></tr><tr><td>17</td><td>43%</td></tr><tr><td>18</td><td>40%</td></tr>
+                <tr><td>19</td><td>36%</td></tr><tr><td>20</td><td>33%</td></tr><tr><td>21</td><td>30%</td></tr>
+                <tr><td>22</td><td>26%</td></tr><tr><td>23</td><td>23%</td></tr><tr><td>24</td><td>20%</td></tr>
+                <tr><td>25</td><td>16%</td></tr><tr><td>26</td><td>13%</td></tr><tr><td>27</td><td>10%</td></tr>
+                <tr><td>28</td><td>6%</td></tr><tr><td>29</td><td>3%</td></tr><tr><td>30</td><td>0%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="app-footer">
+  <span class="footer-disclaimer">Projeto educacional · Não constitui recomendação de investimento · Os cálculos podem conter imprecisões</span>
+  <a class="footer-author-link" href="https://www.linkedin.com/in/matdias0307" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+      <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+    </svg>
+    <span class="footer-author-name">Matheus Soares</span>
+  </a>
+</footer>
+<!-- ================================================== -->
+
+</div>
+
+<script>
+/* ============================================================
+   STATE
+============================================================ */
+const SIM_COLORS = ['#1d9e75','#2251a3','#e07b12','#a32d2d','#7a35b5'];
+let simulations = [];
+let activeSimId = null;
+let simChartInst = null;
+let donutInst = null;
+let compareChartInst = null;
+let calcTimer = null;
+
+const activeSim = () => simulations.find(s => s.id === activeSimId) || null;
+
+/* ============================================================
+   INIT
+============================================================ */
+function init() {
+  addSimulation();
+}
+
+/* ============================================================
+   THEME
+============================================================ */
+function toggleTheme() {
+  const html = document.documentElement;
+  const dark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', dark ? 'light' : 'dark');
+  document.getElementById('themeIcon').innerHTML = dark
+    ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+    : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  const sim = activeSim();
+  if (sim && sim.result) renderResults(sim.result, sim);
+}
+
+/* ============================================================
+   TABS
+============================================================ */
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ttab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (name === 'compare') renderCompare();
+}
+
+/* ============================================================
+   SIMULATION MANAGEMENT
+============================================================ */
+function addSimulation() {
+  if (simulations.length >= 5) { alert('Máximo de 5 simulações atingido.'); return; }
+  const id = Date.now();
+  const n = simulations.length + 1;
+  simulations.push({
+    id,
+    name: `Simulação ${n}`,
+    color: SIM_COLORS[(n - 1) % SIM_COLORS.length],
+    params: {
+      tipo: 'CDB', rent: 'pos',
+      aporteInicial: 10000, aporteRecorrente: 500,
+      periodoVal: 24, periodoUnit: 'meses',
+      selic: 14.5, cdiPct: 100, preTaxa: 12
+    },
+    result: null
+  });
+  setActiveSim(id);
+  updateSimNav();
+  updateSimCounter();
+  scheduleCalc();
+}
+
+function setActiveSim(id) {
+  activeSimId = id;
+  const sim = activeSim();
+  if (!sim) return;
+  loadFormFromSim(sim);
+  updateSimNav();
+  if (sim.result) renderResults(sim.result, sim);
+}
+
+function removeSimulation(id) {
+  if (simulations.length <= 1) { alert('Precisa ter ao menos uma simulação.'); return; }
+  simulations = simulations.filter(s => s.id !== id);
+  if (activeSimId === id) setActiveSim(simulations[0].id);
+  updateSimNav();
+  updateSimCounter();
+}
+
+function duplicateCurrentSim() {
+  if (simulations.length >= 5) { alert('Máximo atingido.'); return; }
+  saveFormToState();
+  const orig = activeSim();
+  if (!orig) return;
+  const id = Date.now();
+  simulations.push({
+    ...JSON.parse(JSON.stringify(orig)),
+    id,
+    name: orig.name + ' (cópia)',
+    color: SIM_COLORS[simulations.length % SIM_COLORS.length]
+  });
+  setActiveSim(id);
+  updateSimNav();
+  updateSimCounter();
+  scheduleCalc();
+}
+
+function loadFormFromSim(sim) {
+  const p = sim.params;
+  document.querySelectorAll('#typeGroup .type-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.type === p.tipo));
+  document.querySelectorAll('.rent-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.rent === p.rent));
+  setEl('selicInput', p.selic);
+  setEl('selicSlider', p.selic);
+  setEl('selicDisplay', fmtPct(p.selic));
+  setEl('cdiInput', p.cdiPct);
+  setEl('cdiSlider', p.cdiPct);
+  setEl('cdiDisplay', p.cdiPct + '%');
+  setEl('preInput', p.preTaxa);
+  setEl('preSlider', p.preTaxa);
+  setEl('preDisplay', fmtPct(p.preTaxa));
+  document.getElementById('aporteInicial').value = fmtMoneyInput(p.aporteInicial);
+  document.getElementById('aporteRecorrente').value = fmtMoneyInput(p.aporteRecorrente);
+  setPeriodoRange(p.periodoUnit);
+  const periodoVal = Math.min(Math.max(p.periodoVal, 1), getPeriodoMax(p.periodoUnit));
+  setEl('periodoVal', periodoVal);
+  setEl('periodoSlider', periodoVal);
+  document.querySelectorAll('.unit-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.unit === p.periodoUnit));
+  setEl('periodoDisplay', p.periodoVal + ' ' + unitAbbr(p.periodoUnit));
+  toggleRentFields(p.rent);
+  updateTaxaEfetiva();
+}
+
+function setEl(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.value = val;
+}
+
+function saveFormToState() {
+  const sim = activeSim();
+  if (!sim) return;
+  const p = sim.params;
+  p.tipo = document.querySelector('#typeGroup .type-btn.active')?.dataset.type || 'CDB';
+  p.rent = document.querySelector('.rent-btn.active')?.dataset.rent || 'pos';
+  p.selic = parseFloat(document.getElementById('selicInput').value) || 14.5;
+  p.cdiPct = parseInt(document.getElementById('cdiInput').value) || 100;
+  p.preTaxa = parseFloat(document.getElementById('preInput').value) || 12;
+  p.aporteInicial = parseMoney(document.getElementById('aporteInicial').value);
+  p.aporteRecorrente = parseMoney(document.getElementById('aporteRecorrente').value);
+  p.periodoVal = parseInt(document.getElementById('periodoVal').value) || 24;
+  p.periodoUnit = document.querySelector('.unit-btn.active')?.dataset.unit || 'meses';
+}
+
+function updateSimNav() {
+  const nav = document.getElementById('simNav');
+  nav.innerHTML = '';
+  simulations.forEach(sim => {
+    const div = document.createElement('div');
+    div.className = 'sim-nav-item' + (sim.id === activeSimId ? ' active' : '');
+    div.onclick = e => { if (!e.target.closest('.sim-nav-remove')) setActiveSim(sim.id); };
+    div.innerHTML = `
+      <div class="sim-nav-dot" style="background:${sim.color}"></div>
+      <span class="sim-nav-label">${sim.name}</span>
+      ${sim.result ? `<span class="sim-nav-val">R$ ${fmtShort(sim.result.liquido)}</span>` : ''}
+      <button class="sim-nav-remove" title="Remover simulação" onclick="removeSimulation(${sim.id})">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    `;
+    nav.appendChild(div);
+  });
+  document.getElementById('addSimBtn').style.display = simulations.length >= 5 ? 'none' : '';
+}
+
+function updateSimCounter() {
+  document.getElementById('simCounter').textContent = simulations.length + '/5 simulações';
+}
+
+/* ============================================================
+   FORM CONTROLS
+============================================================ */
+function selectType(btn) {
+  document.querySelectorAll('#typeGroup .type-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  scheduleCalc();
+}
+
+function selectRent(btn) {
+  document.querySelectorAll('.rent-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  toggleRentFields(btn.dataset.rent);
+  updateTaxaEfetiva();
+  scheduleCalc();
+}
+
+function toggleRentFields(rent) {
+  document.getElementById('cdi-group').style.display = rent === 'pos' ? '' : 'none';
+  document.getElementById('pre-group').style.display = rent === 'pre' ? '' : 'none';
+  document.getElementById('selic-group').style.display = rent === 'pos' ? '' : 'none';
+}
+
+function selectUnit(btn) {
+  document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  updatePeriodo();
+}
+
+function getPeriodoMax(unit) {
+  if (unit === 'dias') return 721;
+  if (unit === 'anos') return 100;
+  return 25;
+}
+
+function setPeriodoRange(unit) {
+  const max = getPeriodoMax(unit);
+  const input = document.getElementById('periodoVal');
+  const slider = document.getElementById('periodoSlider');
+  if (!input || !slider) return;
+  input.max = max;
+  slider.max = max;
+}
+
+function updatePeriodo() {
+  const unit = document.querySelector('.unit-btn.active')?.dataset.unit || 'meses';
+  const input = document.getElementById('periodoVal');
+  const max = getPeriodoMax(unit);
+  let v = parseInt(input.value) || 1;
+  v = Math.min(Math.max(v, 1), max);
+  input.value = v;
+  setPeriodoRange(unit);
+  document.getElementById('periodoSlider').value = v;
+  document.getElementById('periodoDisplay').textContent = v + ' ' + unitAbbr(unit);
+  scheduleCalc();
+}
+
+function syncPeriodo() {
+  const v = parseInt(document.getElementById('periodoSlider').value);
+  document.getElementById('periodoVal').value = v;
+  const unit = document.querySelector('.unit-btn.active')?.dataset.unit || 'meses';
+  document.getElementById('periodoDisplay').textContent = v + ' ' + unitAbbr(unit);
+  scheduleCalc();
+}
+
+function syncSelic() {
+  const v = parseFloat(document.getElementById('selicSlider').value);
+  document.getElementById('selicInput').value = v;
+  document.getElementById('selicDisplay').textContent = fmtPct(v);
+  updateTaxaEfetiva(); scheduleCalc();
+}
+function syncSelicInput() {
+  const v = parseFloat(document.getElementById('selicInput').value) || 14.5;
+  document.getElementById('selicSlider').value = v;
+  document.getElementById('selicDisplay').textContent = fmtPct(v);
+  updateTaxaEfetiva(); scheduleCalc();
+}
+
+function syncCdi() {
+  const v = parseInt(document.getElementById('cdiSlider').value);
+  document.getElementById('cdiInput').value = v;
+  document.getElementById('cdiDisplay').textContent = v + '%';
+  updateTaxaEfetiva(); scheduleCalc();
+}
+function syncCdiInput() {
+  let v = parseInt(document.getElementById('cdiInput').value) || 100;
+  v = Math.min(200, Math.max(50, v));
+  document.getElementById('cdiSlider').value = v;
+  document.getElementById('cdiDisplay').textContent = v + '%';
+  updateTaxaEfetiva(); scheduleCalc();
+}
+
+function syncPre() {
+  const v = parseFloat(document.getElementById('preSlider').value);
+  document.getElementById('preInput').value = v;
+  document.getElementById('preDisplay').textContent = fmtPct(v);
+  updateTaxaEfetiva(); scheduleCalc();
+}
+function syncPreInput() {
+  const v = parseFloat(document.getElementById('preInput').value) || 12;
+  document.getElementById('preSlider').value = v;
+  document.getElementById('preDisplay').textContent = fmtPct(v);
+  updateTaxaEfetiva(); scheduleCalc();
+}
+
+function onMoneyInput(el) { maskMoney(el); scheduleCalc(); }
+
+function updateTaxaEfetiva() {
+  const rent = document.querySelector('.rent-btn.active')?.dataset.rent || 'pos';
+  let taxa;
+  if (rent === 'pos') {
+    const selic = parseFloat(document.getElementById('selicInput').value) || 14.5;
+    const cdiPct = parseInt(document.getElementById('cdiInput').value) || 100;
+    taxa = selic * (cdiPct / 100);
+  } else {
+    taxa = parseFloat(document.getElementById('preInput').value) || 12;
+  }
+  document.getElementById('taxaEfetivaVal').textContent = fmtPct(taxa) + ' a.a.';
+}
+
+/* ============================================================
+   DEBOUNCED AUTO-CALC
+============================================================ */
+function scheduleCalc() {
+  clearTimeout(calcTimer);
+  calcTimer = setTimeout(runCalc, 120);
+}
+
+function runCalc() {
+  saveFormToState();
+  const sim = activeSim();
+  if (!sim) return;
+  sim.result = calcSimulation(sim.params);
+  const p = sim.params;
+  sim.name = `${p.tipo} · ${p.rent === 'pos' ? p.cdiPct + '% CDI' : fmtPct(p.preTaxa) + ' a.a.'}`;
+  updateSimNav();
+  renderResults(sim.result, sim);
+  showMiniResult(sim.result);
+}
+
+/* ============================================================
+   MONEY HELPERS
+============================================================ */
+function maskMoney(el) {
+  let v = el.value.replace(/\D/g, '');
+  if (!v) { el.value = ''; return; }
+  v = parseInt(v, 10);
+  el.value = (v / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function parseMoney(str) {
+  if (!str) return 0;
+  return parseFloat(str.replace(/\./g, '').replace(',', '.')) || 0;
+}
+function fmtMoneyInput(n) {
+  return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+/* ============================================================
+   CALCULATION
+============================================================ */
+function getIRAliquota(value, unit) {
+  if (unit === 'dias') {
+    if (value <= 180) return 22.5;
+    if (value <= 360) return 20;
+    if (value <= 720) return 17.5;
+    return 15;
+  }
+  const meses = unit === 'anos' ? value * 12 : value;
+  if (meses <= 6) return 22.5;
+  if (meses <= 12) return 20;
+  if (meses < 25) return 17.5;
+  return 15;
+}
+
+function unitAbbr(unit) {
+  return unit === 'meses' ? 'm' : unit === 'anos' ? 'a' : 'd';
+}
+
+function calcSimulation(p) {
+  let totalMeses;
+  if (p.periodoUnit === 'dias') totalMeses = p.periodoVal / 30.4375;
+  else if (p.periodoUnit === 'meses') totalMeses = p.periodoVal;
+  else totalMeses = p.periodoVal * 12;
+
+  let totalDias;
+  if (p.periodoUnit === 'dias') totalDias = p.periodoVal;
+  else if (p.periodoUnit === 'meses') totalDias = Math.round(p.periodoVal * 30.4375);
+  else totalDias = Math.round(p.periodoVal * 365.25);
+
+  let taxaAnual;
+  if (p.rent === 'pos') {
+    taxaAnual = (p.selic / 100) * (p.cdiPct / 100);
+  } else {
+    taxaAnual = p.preTaxa / 100;
+  }
+
+  const taxaMensal = Math.pow(1 + taxaAnual, 1 / 12) - 1;
+  const meses = Math.floor(totalMeses);
+  const restanteMeses = totalMeses - meses;
+  let saldo = p.aporteInicial;
+  let totalInvestido = p.aporteInicial;
+
+  const sampleEvery = Math.max(1, Math.floor(Math.max(meses, 1) / 24));
+  const timeline = [{ label: 'Início', saldo: p.aporteInicial, investido: p.aporteInicial }];
+
+  for (let m = 1; m <= meses; m++) {
+    saldo = saldo * (1 + taxaMensal);
+    saldo += p.aporteRecorrente;
+    totalInvestido += p.aporteRecorrente;
+    if (m % sampleEvery === 0 || m === meses) {
+      timeline.push({ label: fmtLabel(m, p.periodoUnit), saldo, investido: totalInvestido });
+    }
+  }
+
+  if (restanteMeses > 0) {
+    saldo = saldo * Math.pow(1 + taxaMensal, restanteMeses);
+    const finalLabel = p.periodoUnit === 'dias' ? `${p.periodoVal}d` : fmtLabel(meses + restanteMeses, p.periodoUnit);
+    timeline.push({ label: finalLabel, saldo, investido: totalInvestido });
+  }
+
+  const bruto = saldo;
+  const lucro = bruto - totalInvestido;
+
+  let iof = 0;
+  if (totalDias < 30) {
+    const iofRates = [96,93,90,86,83,80,76,73,70,66,63,60,56,53,50,46,43,40,36,33,30,26,23,20,16,13,10,6,3,0].map(v => v / 100);
+    const dayIdx = Math.min(totalDias - 1, 29);
+    iof = lucro * (iofRates[dayIdx] || 0);
+  }
+
+  const lucroAposIOF = lucro - iof;
+  const isIsento = p.tipo === 'LCI' || p.tipo === 'LCA';
+  const irAliquota = isIsento ? 0 : getIRAliquota(p.periodoVal, p.periodoUnit) / 100;
+  const ir = lucroAposIOF * irAliquota;
+
+  const liquido = totalInvestido + lucroAposIOF - ir;
+  const lucroLiquido = lucroAposIOF - ir;
+  const rentBruta = totalInvestido > 0 ? (bruto / totalInvestido - 1) * 100 : 0;
+  const rentLiquida = totalInvestido > 0 ? (liquido / totalInvestido - 1) * 100 : 0;
+
+  return {
+    bruto, liquido, totalInvestido, lucro, lucroLiquido,
+    ir, iof, rentBruta, rentLiquida,
+    irAliquota: irAliquota * 100,
+    timeline, totalDias,
+    taxaAnual: taxaAnual * 100,
+    isIsento
+  };
+}
+
+function fmtLabel(m, unit) {
+  if (m >= 12) {
+    const a = Math.floor(m / 12);
+    const mo = m % 12;
+    return mo ? `${a}a ${mo}m` : `${a}a`;
+  }
+  return `${m}m`;
+}
+
+/* ============================================================
+   RENDER RESULTS
+============================================================ */
+function fmt(n) {
+  return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function fmtShort(n) {
+  if (n >= 1e6) return (n / 1e6).toFixed(1).replace('.', ',') + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(1).replace('.', ',') + 'K';
+  return fmt(n);
+}
+function fmtPct(n) {
+  return n.toFixed(2).replace('.', ',') + '%';
+}
+
+function showMiniResult(r) {
+  document.getElementById('mrLiquido').textContent = 'R$ ' + fmt(r.liquido);
+  document.getElementById('mrLucro').textContent = 'R$ ' + fmt(r.lucroLiquido);
+  document.getElementById('mrRent').textContent = '+' + fmtPct(r.rentLiquida);
+}
+
+function renderResults(r, sim) {
+  const area = document.getElementById('resultArea');
+  const irTag = r.isIsento
+    ? '<span class="badge badge-green" style="font-size:11px">Isento de IR</span>'
+    : `<span class="badge badge-amber" style="font-size:11px">IR ${r.irAliquota.toFixed(1)}%</span>`;
+
+  area.innerHTML = `
+    <div class="hero-card">
+      <div class="hero-label">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="16 12 12 8 8 12"/><line x1="12" y1="16" x2="12" y2="8"/></svg>
+        Valor Líquido Final &nbsp;${irTag}
+      </div>
+      <div class="hero-val"><span>R$</span> ${fmt(r.liquido)}</div>
+      <div class="hero-sub">Rentabilidade líquida: +${fmtPct(r.rentLiquida)}</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Total Investido</div>
+        <div class="stat-val">R$ ${fmt(r.totalInvestido)}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Lucro Bruto</div>
+        <div class="stat-val">R$ ${fmt(r.lucro)}</div>
+        <div class="stat-sub">Ret. bruta: +${fmtPct(r.rentBruta)}</div>
+      </div>
+      <div class="stat-card v-green">
+        <div class="stat-label"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Lucro Líquido</div>
+        <div class="stat-val">R$ ${fmt(r.lucroLiquido)}</div>
+      </div>
+      <div class="stat-card v-red">
+        <div class="stat-label"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>IR Descontado</div>
+        <div class="stat-val">R$ ${fmt(r.ir)}</div>
+        <div class="stat-sub">${r.irAliquota.toFixed(1)}% sobre o lucro</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>IOF Descontado</div>
+        <div class="stat-val">${r.iof > 0 ? 'R$ ' + fmt(r.iof) : '—'}</div>
+        <div class="stat-sub">${r.totalDias < 30 ? 'Resgate antes de 30 dias' : 'Não aplicável'}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Taxa Efetiva</div>
+        <div class="stat-val">${fmtPct(r.taxaAnual)} a.a.</div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Evolução do Patrimônio
+        </div>
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:${sim.color}"></div>Patrimônio</div>
+          <div class="legend-item"><div class="legend-dash"></div>Investido</div>
+        </div>
+      </div>
+      <div style="position:relative;height:250px">
+        <canvas id="simChart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>
+          Composição do Resultado
+        </div>
+      </div>
+      <div class="donut-wrap">
+        <div class="donut-canvas-wrap"><canvas id="donutChart"></canvas></div>
+        <div class="donut-legend">
+          <div class="donut-row">
+            <div class="donut-row-left"><div class="donut-dot" style="background:#4da3ff"></div><div class="donut-name">Investido</div></div>
+            <div class="donut-right"><div class="donut-val">R$ ${fmt(r.totalInvestido)}</div><div class="donut-pct">${r.bruto > 0 ? (r.totalInvestido/r.bruto*100).toFixed(1) : 0}%</div></div>
+          </div>
+          <div class="donut-row">
+            <div class="donut-row-left"><div class="donut-dot" style="background:${sim.color}"></div><div class="donut-name">Lucro Líquido</div></div>
+            <div class="donut-right"><div class="donut-val">R$ ${fmt(r.lucroLiquido)}</div><div class="donut-pct">${r.bruto > 0 ? (r.lucroLiquido/r.bruto*100).toFixed(1) : 0}%</div></div>
+          </div>
+          <div class="donut-row">
+            <div class="donut-row-left"><div class="donut-dot" style="background:#e87a12"></div><div class="donut-name">IR + IOF</div></div>
+            <div class="donut-right"><div class="donut-val">R$ ${fmt(r.ir + r.iof)}</div><div class="donut-pct">${r.bruto > 0 ? ((r.ir+r.iof)/r.bruto*100).toFixed(1) : 0}%</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  requestAnimationFrame(() => {
+    renderSimChart(r, sim);
+    renderDonutChart(r, sim);
+  });
+}
+
+/* ============================================================
+   CHARTS
+============================================================ */
+function chartColors() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  return {
+    grid: dark ? '#252c40' : '#e8eaef',
+    tick: dark ? '#8f96b4' : '#48516e',
+    ttBg: dark ? '#1a1f30' : '#fff',
+    ttBorder: dark ? '#252c40' : '#dde0ea',
+    ttTitle: dark ? '#e6e9f4' : '#0f1422',
+    ttBody: dark ? '#8f96b4' : '#48516e',
+    surfaceBg: dark ? '#141824' : '#ffffff',
+  };
+}
+
+function renderSimChart(r, sim) {
+  if (simChartInst) { simChartInst.destroy(); simChartInst = null; }
+  const ctx = document.getElementById('simChart');
+  if (!ctx) return;
+  const c = chartColors();
+  simChartInst = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: r.timeline.map(p => p.label),
+      datasets: [
+        {
+          label: 'Patrimônio Bruto',
+          data: r.timeline.map(p => +p.saldo.toFixed(2)),
+          borderColor: sim.color, backgroundColor: sim.color + '18',
+          fill: true, tension: 0.35, borderWidth: 2.5,
+          pointRadius: 0, pointHoverRadius: 5,
+          pointHoverBackgroundColor: sim.color,
+          pointHoverBorderColor: c.surfaceBg, pointHoverBorderWidth: 2
+        },
+        {
+          label: 'Total Investido',
+          data: r.timeline.map(p => +p.investido.toFixed(2)),
+          borderColor: c.tick + '80', backgroundColor: 'transparent',
+          borderDash: [5, 4], tension: 0, borderWidth: 1.5,
+          pointRadius: 0, pointHoverRadius: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: c.ttBg, borderColor: c.ttBorder, borderWidth: 1,
+          titleColor: c.ttTitle, bodyColor: c.ttBody, padding: 10,
+          callbacks: { label: ctx => ` ${ctx.dataset.label}: R$ ${ctx.parsed.y.toLocaleString('pt-BR',{minimumFractionDigits:2})}` }
+        }
+      },
+      scales: {
+        y: {
+          ticks: { callback: v => v>=1000?'R$ '+(v/1000).toFixed(0)+'k':'R$ '+v, color:c.tick, font:{size:11,family:'DM Sans'}, maxTicksLimit:6 },
+          grid: { color: c.grid }, border: { color: 'transparent' }
+        },
+        x: { ticks: { color:c.tick, font:{size:11}, maxTicksLimit:12 }, grid: { display:false }, border: { color:'transparent' } }
+      }
+    }
+  });
+}
+
+function renderDonutChart(r, sim) {
+  if (donutInst) { donutInst.destroy(); donutInst = null; }
+  const ctx = document.getElementById('donutChart');
+  if (!ctx) return;
+  donutInst = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Investido','Lucro Líquido','IR + IOF'],
+      datasets: [{
+        data: [+r.totalInvestido.toFixed(2), +r.lucroLiquido.toFixed(2), +(r.ir+r.iof).toFixed(2)],
+        backgroundColor: ['#4da3ff', sim.color, '#e87a12'],
+        borderWidth: 0, hoverOffset: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '68%',
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` R$ ${ctx.parsed.toLocaleString('pt-BR',{minimumFractionDigits:2})}` } }
+      }
+    }
+  });
+}
+
+/* ============================================================
+   COMPARE — with table
+============================================================ */
+function typePillClass(tipo) {
+  if (tipo === 'LCI' || tipo === 'LCA') return 'lci';
+  if (tipo === 'Tesouro') return 'tsd';
+  return '';
+}
+
+function renderCompare() {
+  const area = document.getElementById('compareArea');
+  const sims = simulations.filter(s => s.result);
+
+  if (sims.length === 0) {
+    area.innerHTML = `<div class="empty-state">
+      <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <p>Nenhuma simulação ainda</p>
+      <small>Acesse o Simulador para criar e ver resultados</small>
+    </div>`;
+    return;
+  }
+
+  const best = sims.reduce((a, b) => a.result.liquido > b.result.liquido ? a : b);
+  const lowestTax = sims.reduce((a, b) => (a.result.ir+a.result.iof) < (b.result.ir+b.result.iof) ? a : b);
+  const maxL = Math.max(...sims.map(s => s.result.liquido));
+  const minL = Math.min(...sims.map(s => s.result.liquido));
+
+  // Build compare table rows
+  // Sort by liquido descending so best is on top
+  const sorted = [...sims].sort((a, b) => b.result.liquido - a.result.liquido);
+  const baseVal = sorted[sorted.length - 1]?.result.liquido || sorted[0].result.liquido;
+
+  const tableRows = sorted.map((sim, idx) => {
+    const r = sim.result;
+    const isBest = sim.id === best.id;
+    const isBase = idx === sorted.length - 1;
+    const diff = isBase ? null : ((r.liquido - baseVal) / baseVal * 100);
+    const rentColor = r.rentLiquida >= 10 ? 'c-green' : r.rentLiquida >= 5 ? '' : 'c-dim';
+    const taxTotal = r.ir + r.iof;
+    const taxColor = sim.id === lowestTax.id ? 'c-green' : 'c-red';
+
+    let diffCell = '';
+    if (isBase) {
+      diffCell = `<span class="diff-zero">Base</span>`;
+    } else if (diff !== null) {
+      const sign = diff >= 0 ? '+' : '';
+      diffCell = `<span class="${diff >= 0 ? 'diff-positive' : 'diff-negative'}">${sign}${diff.toFixed(2)}%</span>`;
+    }
+
+    const tipoPill = `<span class="type-pill ${typePillClass(sim.params.tipo)}">${sim.params.tipo}</span>`;
+    const bestBadge = isBest ? `<span class="best-badge"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Melhor</span>` : '';
+
+    return `
+      <tr class="${isBest ? 'row-best' : ''}">
+        <td>
+          <div class="ctd-sim">
+            <div class="ctd-dot" style="background:${sim.color}"></div>
+            <span class="ctd-name">${sim.name}</span>
+            <div class="ctd-badges">
+              ${bestBadge}
+            </div>
+          </div>
+        </td>
+        <td>${tipoPill}</td>
+        <td class="c-bold">R$ ${fmt(r.totalInvestido)}</td>
+        <td>R$ ${fmt(r.bruto)}</td>
+        <td class="${taxColor}">R$ ${fmt(taxTotal)}</td>
+        <td class="c-bold c-green" style="color:var(--green2)">R$ ${fmt(r.liquido)}</td>
+        <td class="${rentColor}" style="${r.rentLiquida > 0 ? 'color:var(--green2);font-weight:700' : ''}">${fmtPct(r.rentLiquida)}</td>
+        <td>${diffCell}</td>
+      </tr>`;
+  }).join('');
+
+  area.innerHTML = `
+
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Comparativo de Evolução
+        </div>
+      </div>
+      <div style="position:relative;height:280px"><canvas id="compareChart"></canvas></div>
+      <div style="display:flex;gap:14px;margin-top:12px;flex-wrap:wrap">
+        ${sims.map(s=>`<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2)"><div style="width:18px;height:3px;border-radius:1px;background:${s.color}"></div>${s.name}</div>`).join('')}
+      </div>
+    </div>
+
+    <div class="compare-table-card">
+      <div class="compare-table-header">
+        <div class="compare-table-title">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg>
+          Tabela Comparativa
+        </div>
+      </div>
+      <div class="compare-table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Simulação</th>
+              <th style="text-align:left">Tipo</th>
+              <th>Total Inv.</th>
+              <th>Valor Bruto</th>
+              <th>IR + IOF</th>
+              <th>Valor Líquido</th>
+              <th>Rentab. Líq.</th>
+              <th>Diferença</th>
+            </tr>
+          </thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  requestAnimationFrame(() => renderCompareChart(sims));
+}
+
+function renderCompareChart(sims) {
+  if (compareChartInst) { compareChartInst.destroy(); compareChartInst = null; }
+  const ctx = document.getElementById('compareChart');
+  if (!ctx) return;
+  const c = chartColors();
+  const refSim = sims.reduce((a, b) => a.result.timeline.length >= b.result.timeline.length ? a : b);
+  const labels = refSim.result.timeline.map(p => p.label);
+
+  compareChartInst = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: sims.map(sim => ({
+        label: sim.name,
+        data: sim.result.timeline.map(p => +p.saldo.toFixed(2)),
+        borderColor: sim.color, backgroundColor: 'transparent',
+        tension: 0.35, borderWidth: 2,
+        pointRadius: 0, pointHoverRadius: 5,
+        pointHoverBackgroundColor: sim.color,
+        pointHoverBorderColor: c.surfaceBg, pointHoverBorderWidth: 2
+      }))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: c.ttBg, borderColor: c.ttBorder, borderWidth: 1,
+          titleColor: c.ttTitle, bodyColor: c.ttBody, padding: 10,
+          callbacks: { label: ctx => ` ${ctx.dataset.label}: R$ ${ctx.parsed.y.toLocaleString('pt-BR',{minimumFractionDigits:2})}` }
+        }
+      },
+      scales: {
+        y: {
+          ticks: { callback: v => v>=1000?'R$ '+(v/1000).toFixed(0)+'k':'R$ '+v, color:c.tick, font:{size:11,family:'DM Sans'}, maxTicksLimit:6 },
+          grid: { color: c.grid }, border: { color: 'transparent' }
+        },
+        x: { ticks: { color:c.tick, font:{size:11}, maxTicksLimit:12 }, grid: { display:false }, border: { color:'transparent' } }
+      }
+    }
+  });
+}
+
+/* ============================================================
+   BOOTSTRAP
+============================================================ */
+init();
+</script>
+</div>
+</body>
+</html>
