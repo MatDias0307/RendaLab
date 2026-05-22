@@ -71,6 +71,16 @@ input,select{font-family:inherit;font-size:inherit;color:var(--text)}
 .sim-nav-remove svg{width:11px;height:11px;stroke:var(--text3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .sim-nav-remove:hover svg{stroke:var(--red)}
 
+/* Inline name editing */
+.sim-nav-edit{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .15s;flex-shrink:0;border:1px solid transparent;margin-right:2px}
+.sim-nav-item:hover .sim-nav-edit{opacity:1}
+.sim-nav-edit:hover{background:var(--accent-light);border-color:rgba(34,81,163,.25)}
+.sim-nav-edit svg{width:11px;height:11px;stroke:var(--text3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.sim-nav-edit:hover svg{stroke:var(--accent)}
+.sim-nav-name-input{flex:1;font-size:13px;font-weight:500;color:var(--text);background:var(--surface);border:1px solid var(--accent2);border-radius:5px;padding:1px 6px;outline:none;min-width:0;box-shadow:0 0 0 2px rgba(34,81,163,.12);font-family:'DM Sans',sans-serif}
+.sim-nav-label.custom-name{color:var(--text);font-style:normal}
+.sim-nav-label .auto-badge{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);background:var(--surface3);border-radius:3px;padding:1px 4px;margin-left:4px;vertical-align:middle;opacity:.7}
+
 .sim-nav-add{display:flex;align-items:center;justify-content:center;gap:7px;padding:8px 12px;border-radius:var(--r-sm);border:1px dashed var(--border2);color:var(--text3);font-size:13px;cursor:pointer;transition:all .18s;margin:6px 14px 10px}
 .sim-nav-add:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
 .sim-nav-add svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -719,6 +729,7 @@ function addSimulation() {
   simulations.push({
     id,
     name: `Simulação ${n}`,
+    customName: null,
     color: SIM_COLORS[(n - 1) % SIM_COLORS.length],
     params: {
       tipo: 'CDB', rent: 'pos',
@@ -763,6 +774,7 @@ function duplicateCurrentSim() {
     ...JSON.parse(JSON.stringify(orig)),
     id,
     name: orig.name + ' (cópia)',
+    customName: null,
     color: SIM_COLORS[simulations.length % SIM_COLORS.length]
   });
   setActiveSim(id);
@@ -840,18 +852,127 @@ function updateSimNav() {
   simulations.forEach(sim => {
     const div = document.createElement('div');
     div.className = 'sim-nav-item' + (sim.id === activeSimId ? ' active' : '');
-    div.onclick = e => { if (!e.target.closest('.sim-nav-remove')) setActiveSim(sim.id); };
-    div.innerHTML = `
-      <div class="sim-nav-dot" style="background:${sim.color}"></div>
-      <span class="sim-nav-label">${sim.name}</span>
-      ${sim.result ? `<span class="sim-nav-val">R$ ${fmtShort(sim.result.liquido)}</span>` : ''}
-      <button class="sim-nav-remove" title="Remover simulação" onclick="removeSimulation(${sim.id})">
-        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    `;
+    div.onclick = e => {
+      if (!e.target.closest('.sim-nav-remove') && !e.target.closest('.sim-nav-edit') && !e.target.closest('.sim-nav-name-input')) {
+        setActiveSim(sim.id);
+      }
+    };
+
+    const dot = document.createElement('div');
+    dot.className = 'sim-nav-dot';
+    dot.style.background = sim.color;
+    div.appendChild(dot);
+
+    // Label span (shown when not editing)
+    const label = document.createElement('span');
+    label.className = 'sim-nav-label' + (sim.customName ? ' custom-name' : '');
+    label.title = sim.customName ? 'Nome personalizado — clique no lápis para editar' : 'Nome automático — clique no lápis para personalizar';
+    label.textContent = sim.name;
+    label.ondblclick = e => {
+      e.stopPropagation();
+      startEditSimName(sim.id, div, label, editBtn);
+    };
+    div.appendChild(label);
+
+    // Value badge
+    if (sim.result) {
+      const val = document.createElement('span');
+      val.className = 'sim-nav-val';
+      val.textContent = 'R$ ' + fmtShort(sim.result.liquido);
+      div.appendChild(val);
+    }
+
+    // Edit (pencil) button
+    const editBtn = document.createElement('button');
+    editBtn.className = 'sim-nav-edit';
+    editBtn.title = 'Editar nome';
+    editBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+    editBtn.onclick = e => {
+      e.stopPropagation();
+      startEditSimName(sim.id, div, label, editBtn);
+    };
+    div.appendChild(editBtn);
+
+    // Remove button
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'sim-nav-remove';
+    removeBtn.title = 'Remover simulação';
+    removeBtn.innerHTML = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+    removeBtn.onclick = e => { e.stopPropagation(); removeSimulation(sim.id); };
+    div.appendChild(removeBtn);
+
     nav.appendChild(div);
   });
   document.getElementById('addSimBtn').style.display = simulations.length >= 5 ? 'none' : '';
+}
+
+function startEditSimName(simId, container, labelEl, editBtn) {
+  // Prevent double-editing
+  if (container.querySelector('.sim-nav-name-input')) return;
+
+  const sim = simulations.find(s => s.id === simId);
+  if (!sim) return;
+
+  // Hide label and edit button
+  labelEl.style.display = 'none';
+  editBtn.style.display = 'none';
+
+  // Also hide value badge while editing
+  const valEl = container.querySelector('.sim-nav-val');
+  if (valEl) valEl.style.display = 'none';
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'sim-nav-name-input';
+  input.value = sim.name;
+  input.maxLength = 40;
+  input.placeholder = 'Nome da simulação…';
+
+  // Insert before editBtn
+  container.insertBefore(input, editBtn);
+  input.focus();
+  input.select();
+
+  function commitEdit() {
+    const newName = input.value.trim();
+    if (newName) {
+      sim.customName = newName;
+      sim.name = newName;
+    } else {
+      // Empty = revert to auto-name
+      sim.customName = null;
+      // Regenerate auto name from params
+      const p = sim.params;
+      if (p.tipo === 'Poupança') {
+        sim.name = `Poupança · SELIC ${fmtPct(p.selic)}`;
+      } else {
+        sim.name = `${p.tipo} · ${p.rent === 'pos' ? p.cdiPct + '% CDI' : fmtPct(p.preTaxa) + ' a.a.'}`;
+      }
+    }
+    finishEdit();
+  }
+
+  function cancelEdit() {
+    finishEdit();
+  }
+
+  function finishEdit() {
+    input.removeEventListener('blur', commitEdit);
+    input.removeEventListener('keydown', onKeyDown);
+    if (input.parentNode) input.parentNode.removeChild(input);
+    labelEl.style.display = '';
+    editBtn.style.display = '';
+    if (valEl) valEl.style.display = '';
+    updateSimNav();
+  }
+
+  function onKeyDown(e) {
+    if (e.key === 'Enter') { e.preventDefault(); commitEdit(); }
+    if (e.key === 'Escape') { e.preventDefault(); cancelEdit(); }
+  }
+
+  input.addEventListener('blur', commitEdit);
+  input.addEventListener('keydown', onKeyDown);
 }
 
 function updateSimCounter() {
@@ -1041,10 +1162,13 @@ function runCalc() {
   if (!sim) return;
   sim.result = calcSimulation(sim.params);
   const p = sim.params;
-  if (p.tipo === 'Poupança') {
-    sim.name = `Poupança · SELIC ${fmtPct(p.selic)}`;
-  } else {
-    sim.name = `${p.tipo} · ${p.rent === 'pos' ? p.cdiPct + '% CDI' : fmtPct(p.preTaxa) + ' a.a.'}`;
+  // Only auto-generate name if the user hasn't set a custom one
+  if (!sim.customName) {
+    if (p.tipo === 'Poupança') {
+      sim.name = `Poupança · SELIC ${fmtPct(p.selic)}`;
+    } else {
+      sim.name = `${p.tipo} · ${p.rent === 'pos' ? p.cdiPct + '% CDI' : fmtPct(p.preTaxa) + ' a.a.'}`;
+    }
   }
   updateSimNav();
   renderResults(sim.result, sim);

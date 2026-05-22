@@ -4,7 +4,7 @@ Projeto simples de calculadora de investimentos em renda fixa, construído com H
 
 ## O que o projeto faz
 
-- Simula investimentos em CDB, LCI/LCA e Tesouro Direto
+- Simula investimentos em CDB, LCI/LCA, Tesouro e Poupança
 - Suporta rentabilidade pré-fixada e pós-fixada (CDI/SELIC)
 - Calcula aporte inicial, aporte mensal e prazo em dias/meses/anos
 - Aplica IOF regressivo para resgates antes de 30 dias
